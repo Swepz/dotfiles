@@ -1,0 +1,119 @@
+# HyprDynamicMonitors config
+# Hardware:
+#   - Samsung Display Corp. ATNA60KA02-0 (eDP OLED, 3200x2000@120, scale 1.60)
+#   - HP Inc. HP P34hc G4 CNC51919TC (work ultrawide, 3440x1440@60)
+#   - Dell Inc. DELL U2721DE 10GFD23 (home, 2560x1440@60)
+#
+# Note: external monitors connect via Thunderbolt through the NVIDIA dGPU.
+# Never disable by connector name (e.g. DP-4) — the connector a Thunderbolt
+# monitor lands on can change between reboots. Always use desc: matching.
+#
+# State coverage:
+#   any lid,  external   -> docked       (template handles lid + per-monitor tuning)
+#   lid open,   solo     -> laptop_lid_open  (eDP only)
+#   lid closed, solo     -> lid_closed_solo  (eDP kept on + systemctl suspend)
+#   anything unexpected  -> fallback         (enable whatever is present)
+
+[general]
+# Where HDM writes the generated monitor config. Sourced from hyprland.conf.
+destination = "$HOME/.config/hypr/monitors.conf"
+# Collect a burst of events, apply once. 1500ms is the upstream default.
+debounce_time_ms = 1500
+# Toast on profile changes so we see what HDM decided (optional, comment out if noisy)
+post_apply_exec = "notify-send -t 2000 'Display profile' \"$HYPRDYNAMICMONITORS_PROFILE\""
+
+[notifications]
+disabled = false
+timeout_ms = 3000
+
+[lid_events]
+# Defaults query UPower's LidIsClosed via D-Bus.
+# Verify your upower supports it before enabling:
+#   gdbus introspect --system --dest org.freedesktop.UPower \
+#     --object-path /org/freedesktop/UPower | grep Lid
+
+[lid_events.dbus_query_object]
+destination = "org.freedesktop.UPower"
+path = "/org/freedesktop/UPower"
+method = "org.freedesktop.DBus.Properties.Get"
+expected_lid_closing_value = "true"
+
+[[lid_events.dbus_query_object.args]]
+arg = "org.freedesktop.UPower"
+
+[[lid_events.dbus_query_object.args]]
+arg = "LidIsClosed"
+
+[[lid_events.dbus_signal_match_rules]]
+interface = "org.freedesktop.DBus.Properties"
+object_path = "/org/freedesktop/UPower"
+member = "PropertiesChanged"
+
+[[lid_events.dbus_signal_receive_filters]]
+name = "org.freedesktop.DBus.Properties.PropertiesChanged"
+body = "LidIsClosed"
+
+[scoring]
+# Defaults: name_match=10, description_match=5, lid_state_match=2
+# Kept at defaults. Docked profile wins via 2 required monitors (2*5=10) vs
+# solo profiles (1*5=5). Lid state is handled in the docked template, not as
+# a profile condition, so no lid bonus for docked — but 10 > 7 regardless.
+name_match = 10
+description_match = 5
+lid_state_match = 2
+
+# --- Fallback when no profile matches (e.g. a new unknown monitor) ---
+[fallback_profile]
+config_file = "hyprconfigs/fallback.conf"
+config_file_type = "static"
+
+# ============================================================
+# PROFILES
+# ============================================================
+
+# Docked: laptop + any external monitor (template handles lid state + per-monitor tuning)
+# Score: 2 required monitors (2*5=10) — always beats solo profiles (5+2=7)
+# Known monitors (HP P34hc, Dell U2721DE) get tuned resolution/position.
+# Unknown monitors get preferred,auto-right,1 — zero config needed.
+[profiles.docked]
+config_file = "hyprconfigs/docked.go.tmpl"
+config_file_type = "template"
+
+[[profiles.docked.conditions.required_monitors]]
+description = "Samsung Display Corp. ATNA60KA02-0"
+monitor_tag = "laptop"
+
+[[profiles.docked.conditions.required_monitors]]
+description = ".*"
+match_description_using_regex = true
+monitor_tag = "external"
+
+# Laptop solo + lid open: normal mobile use
+# Score: 1 desc match (5) + lid bonus (2) = 7
+[profiles.laptop_lid_open]
+config_file = "hyprconfigs/laptop-only.conf"
+config_file_type = "static"
+
+[profiles.laptop_lid_open.conditions]
+lid_state = "Opened"
+
+[[profiles.laptop_lid_open.conditions.required_monitors]]
+description = "Samsung Display Corp. ATNA60KA02-0"
+monitor_tag = "laptop"
+
+# Laptop solo + lid closed: suspend. We keep eDP enabled in the config (so
+# Hyprland never hits "zero monitors" if the suspend is delayed/aborted) and
+# fire systemctl suspend as the post-apply hook. On resume + lid open the
+# profile will switch back to laptop_lid_open automatically.
+# Score: 1 desc match (5) + lid bonus (2) = 7
+[profiles.lid_closed_solo]
+config_file = "hyprconfigs/lid-closed-solo.conf"
+config_file_type = "static"
+post_apply_exec = "systemctl suspend"
+
+[profiles.lid_closed_solo.conditions]
+lid_state = "Closed"
+
+[[profiles.lid_closed_solo.conditions.required_monitors]]
+description = "Samsung Display Corp. ATNA60KA02-0"
+monitor_tag = "laptop"

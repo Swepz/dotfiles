@@ -1,0 +1,30 @@
+---
+- name: Install devtools packages
+  become: true
+  community.general.pacman:
+    name: "{{ devtools_packages }}"
+    state: present
+
+- name: Ensure docker group exists
+  become: true
+  ansible.builtin.group:
+    name: docker
+    state: present
+
+- name: Add user to docker group
+  become: true
+  ansible.builtin.user:
+    name: "{{ ansible_facts.env.USER }}"
+    groups: docker
+    append: true
+
+- name: Check if Claude Code is installed
+  ansible.builtin.command: which claude
+  register: claude_check
+  changed_when: false
+  failed_when: false
+
+- name: Install Claude Code
+  when: claude_check.rc != 0
+  ansible.builtin.shell: curl -fsSL https://claude.ai/install.sh | sh
+  become: false

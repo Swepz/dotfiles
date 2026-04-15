@@ -1,0 +1,200 @@
+---
+dotfiles_repo: "git@github.com:Swepz/dotfiles.git"
+dotfiles_dest: "{{ ansible_facts.env.HOME }}/.dotfiles"
+
+stow_packages:
+  - alacritty
+  - dunst
+  - fish
+  - gh
+  - git
+  - gtk
+  - htop
+  - hypr
+  - hyprdynamicmonitors
+  - kitty
+  - nvim
+  - rofi
+  - waybar
+  - waypaper
+  - waytrogen
+  - wlogout
+  - zed
+
+base_packages:
+  - base
+  - base-devel
+  - git
+  - stow
+  - curl
+  - wget
+  - unzip
+  - less
+  - tree
+  - jq
+  - fd
+  - ripgrep
+  - fastfetch
+  - pacman-contrib
+  - smartmontools
+  - usbutils
+  - linux
+  - linux-firmware
+  - linux-headers
+  - lvm2
+  - grub
+  - intel-ucode
+
+shell_packages:
+  - fish
+  - starship
+  - zoxide
+  - fzf
+  - eza
+  - z
+  - gum
+  - calc
+  - figlet
+  - tldr
+  - cloc
+  - htop
+
+editor_packages:
+  - neovim
+  - vim
+  - zed
+  - nano
+
+terminal_packages:
+  - kitty
+  - alacritty
+  - tmux
+
+desktop_packages:
+  - hyprland
+  - hyprpaper
+  - hypridle
+  - hyprlock
+  - hyprpicker
+  - hyprcursor
+  - hyprlang
+  - hyprutils
+  - hyprwayland-scanner
+  - hyprland-qt-support
+  - waybar
+  - rofi
+  - dunst
+  - swaync
+  - cliphist
+  - nwg-dock-hyprland
+  - xdg-desktop-portal-hyprland
+  - xdg-desktop-portal-gnome
+  - xdg-utils
+  - polkit-gnome
+  - brightnessctl
+  - imagemagick
+  - matugen
+  - pavucontrol
+  - network-manager-applet
+  - qt5-wayland
+  - qt6ct
+  - otf-font-awesome
+  - woff2-font-awesome
+  - ttf-fira-code
+  - ttf-fira-sans
+  - ttf-firacode-nerd
+  - ttf-material-icons
+  - papirus-icon-theme
+  - socat  # used by ~/.config/hypr/scripts/waybar-watcher.sh to listen on Hyprland socket2
+
+devtools_packages:
+  - docker
+  - docker-buildx
+  - docker-compose
+  - nvidia-container-toolkit
+  - github-cli
+  - npm
+  - python-jinja
+  - cppcheck
+  - pandoc-cli
+  # Languages & toolchains
+  - rust
+  - gcc
+  - cmake
+  - make
+  - python
+  - lua
+  - luarocks
+  # Dev tools
+  - uv
+  - lazygit
+  - zathura
+  - zathura-pdf-mupdf
+
+gpu_packages:
+  - nvidia-open-dkms
+  - nvidia-utils
+  - nvidia-settings
+  - lib32-nvidia-utils
+  - egl-wayland
+  - vulkan-intel
+  - vulkan-nouveau
+  - vulkan-radeon
+  - intel-media-driver
+  - libva-intel-driver
+  - xf86-video-amdgpu
+  - xf86-video-ati
+  - xf86-video-nouveau
+
+app_packages:
+  - firefox
+  - chromium
+  - signal-desktop
+  - qbittorrent
+  - krita
+  - gwenview
+  - kate
+  - nautilus
+  - dolphin
+  - ark
+  - gparted
+  - filelight
+  - wine-staging
+  - distrobox
+  - gnome-calendar
+  - gnome-keyring
+
+network_packages:
+  - networkmanager
+  - wireless_tools
+  - iwd
+  - arp-scan
+  - zerotier-one
+  - power-profiles-daemon
+
+aur_packages:
+  - antigravity
+  - bibata-cursor-theme
+  - etcher-bin
+  - grimblast-git
+  - hyprdynamicmonitors-bin  # monitor/lid/power aware profile manager for Hyprland (clamshell mode)
+  - pacseek
+  - python-pywalfox
+  - sddm-sugar-candy-git
+  - visual-studio-code-insiders-bin
+  - waypaper
+  - waytrogen
+  - wlogout
+  - zen-browser-bin
+
+enabled_services:
+  - NetworkManager
+  - docker
+  - zerotier-one
+  - nvidia-suspend
+  - nvidia-hibernate
+  - nvidia-resume
+  - fstrim.timer
+
+tmux_repo: "https://github.com/gpakosz/.tmux.git"
+tmux_dest: "{{ ansible_facts.env.HOME }}/.tmux"

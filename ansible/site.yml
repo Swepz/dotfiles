@@ -1,0 +1,31 @@
+---
+- name: Provision Arch Linux workstation
+  hosts: localhost
+  connection: local
+
+  pre_tasks:
+    - name: Install community.general collection
+      ansible.builtin.command:
+        cmd: ansible-galaxy collection install community.general
+      changed_when: false
+      become: false
+
+  roles:
+    - role: base
+      tags: [base, packages]
+    - role: shell
+      tags: [shell, packages]
+    - role: editor
+      tags: [editor, packages]
+    - role: terminal
+      tags: [terminal, packages]
+    - role: desktop
+      tags: [desktop, packages]
+    - role: devtools
+      tags: [devtools, packages]
+    - role: aur
+      tags: [aur, packages]
+    - role: services
+      tags: [services]
+    - role: dotfiles
+      tags: [dotfiles, stow]

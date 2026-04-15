@@ -1,0 +1,6 @@
+# Fish runtime state (machine-local universal variables and atomic-write leftovers)
+fish_variables
+fish_variables*
+
+# Waytrogen stores live dconf state (current wallpaper, saved_wallpapers, absolute paths)
+waytrogen/.config/waytrogen/config.json

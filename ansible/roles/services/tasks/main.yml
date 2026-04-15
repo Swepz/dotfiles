@@ -1,0 +1,22 @@
+---
+- name: Set sddm as display manager
+  become: true
+  ansible.builtin.file:
+    src: /usr/lib/systemd/system/sddm.service
+    dest: /etc/systemd/system/display-manager.service
+    state: link
+    force: true
+
+- name: Reload systemd after display manager change
+  become: true
+  ansible.builtin.systemd:
+    daemon_reload: true
+
+- name: Enable and start system services
+  become: true
+  ansible.builtin.systemd:
+    name: "{{ item }}"
+    enabled: true
+    state: started
+  loop: "{{ enabled_services }}"
+  ignore_errors: true

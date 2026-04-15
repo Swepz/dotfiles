@@ -1,0 +1,22 @@
+---
+- name: Install terminal packages
+  become: true
+  community.general.pacman:
+    name: "{{ terminal_packages }}"
+    state: present
+
+- name: Clone gpakosz/.tmux
+  ansible.builtin.git:
+    repo: "{{ tmux_repo }}"
+    dest: "{{ tmux_dest }}"
+    version: master
+    update: true
+  become: false
+
+- name: Symlink .tmux.conf
+  ansible.builtin.file:
+    src: "{{ tmux_dest }}/.tmux.conf"
+    dest: "{{ ansible_facts.env.HOME }}/.tmux.conf"
+    state: link
+    force: true
+  become: false

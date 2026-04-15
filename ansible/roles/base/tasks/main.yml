@@ -1,0 +1,41 @@
+---
+- name: Update package database
+  become: true
+  community.general.pacman:
+    update_cache: true
+
+- name: Install base packages
+  become: true
+  community.general.pacman:
+    name: "{{ base_packages }}"
+    state: present
+
+- name: Enable multilib repository
+  become: true
+  ansible.builtin.replace:
+    path: /etc/pacman.conf
+    regexp: '^#\[multilib\]\n#Include = /etc/pacman\.d/mirrorlist'
+    replace: '[multilib]\nInclude = /etc/pacman.d/mirrorlist'
+
+- name: Update package database after enabling multilib
+  become: true
+  community.general.pacman:
+    update_cache: true
+
+- name: Install GPU packages
+  become: true
+  community.general.pacman:
+    name: "{{ gpu_packages }}"
+    state: present
+
+- name: Install network packages
+  become: true
+  community.general.pacman:
+    name: "{{ network_packages }}"
+    state: present
+
+- name: Install application packages
+  become: true
+  community.general.pacman:
+    name: "{{ app_packages }}"
+    state: present

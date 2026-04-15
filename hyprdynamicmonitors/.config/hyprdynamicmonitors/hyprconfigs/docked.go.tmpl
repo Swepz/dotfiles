@@ -1,0 +1,49 @@
+{{- $laptop := index .MonitorsByTag "laptop" -}}
+{{- $external := index .MonitorsByTag "external" -}}
+{{- if isLidClosed }}
+# Clamshell: laptop panel off, external primary
+monitor={{ $laptop.Name }},disable
+{{- else }}
+# Lid open: both displays active
+monitor={{ $laptop.Name }},3200x2000@120,0x0,1.60
+{{- end }}
+{{- if eq $external.Description "HP Inc. HP P34hc G4 CNC51919TC" }}
+monitor={{ $external.Name }},3440x1440@60,{{ if isLidClosed }}0x0{{ else }}auto-right{{ end }},1
+{{- else if eq $external.Description "Dell Inc. DELL U2721DE 10GFD23" }}
+monitor={{ $external.Name }},2560x1440@59.95,{{ if isLidClosed }}0x0{{ else }}auto-right{{ end }},1
+{{- else }}
+monitor={{ $external.Name }},preferred,{{ if isLidClosed }}0x0{{ else }}auto-right{{ end }},1
+{{- end }}
+
+# Catch-all for any other unexpected monitor
+monitor=,preferred,auto,1
+
+# -----------------------------------------------------
+# Workspace pinning
+# One `default:true` per monitor (the rest are just persistent)
+# to avoid the persistent+default duplication edge case
+# (hyprwm/Hyprland#9947).
+# -----------------------------------------------------
+{{- if isLidClosed }}
+workspace = 1,  monitor:{{ $external.Name }}, default:true, persistent:true
+workspace = 2,  monitor:{{ $external.Name }}, persistent:true
+workspace = 3,  monitor:{{ $external.Name }}, persistent:true
+workspace = 4,  monitor:{{ $external.Name }}, persistent:true
+workspace = 5,  monitor:{{ $external.Name }}, persistent:true
+workspace = 6,  monitor:{{ $external.Name }}, persistent:true
+workspace = 7,  monitor:{{ $external.Name }}, persistent:true
+workspace = 8,  monitor:{{ $external.Name }}, persistent:true
+workspace = 9,  monitor:{{ $external.Name }}, persistent:true
+workspace = 10, monitor:{{ $external.Name }}, persistent:true
+{{- else }}
+workspace = 1,  monitor:{{ $laptop.Name }}, default:true, persistent:true
+workspace = 2,  monitor:{{ $laptop.Name }}, persistent:true
+workspace = 3,  monitor:{{ $laptop.Name }}, persistent:true
+workspace = 4,  monitor:{{ $laptop.Name }}, persistent:true
+workspace = 5,  monitor:{{ $laptop.Name }}, persistent:true
+workspace = 6,  monitor:{{ $external.Name }}, default:true, persistent:true
+workspace = 7,  monitor:{{ $external.Name }}, persistent:true
+workspace = 8,  monitor:{{ $external.Name }}, persistent:true
+workspace = 9,  monitor:{{ $external.Name }}, persistent:true
+workspace = 10, monitor:{{ $external.Name }}, persistent:true
+{{- end }}

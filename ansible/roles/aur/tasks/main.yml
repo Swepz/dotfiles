@@ -1,0 +1,56 @@
+---
+- name: Create aur_builder user
+  become: true
+  ansible.builtin.user:
+    name: aur_builder
+    create_home: true
+    group: wheel
+    shell: /usr/bin/nologin
+
+- name: Allow aur_builder passwordless pacman
+  become: true
+  ansible.builtin.lineinfile:
+    path: /etc/sudoers.d/11-aur-builder
+    line: "aur_builder ALL=(ALL) NOPASSWD: ALL"
+    create: true
+    mode: "0440"
+    validate: "visudo -cf %s"
+
+- name: Check if yay is installed
+  ansible.builtin.command: which yay
+  register: yay_check
+  changed_when: false
+  failed_when: false
+
+- name: Install yay from AUR
+  when: yay_check.rc != 0
+  block:
+    - name: Clone yay
+      become: true
+      become_user: aur_builder
+      ansible.builtin.git:
+        repo: https://aur.archlinux.org/yay.git
+        dest: /tmp/yay-build
+        version: master
+
+    - name: Build and install yay
+      become: true
+      become_user: aur_builder
+      ansible.builtin.command:
+        cmd: makepkg -si --noconfirm
+        chdir: /tmp/yay-build
+
+    - name: Clean up yay build directory
+      ansible.builtin.file:
+        path: /tmp/yay-build
+        state: absent
+
+- name: Install AUR package
+  become: true
+  become_user: aur_builder
+  ansible.builtin.command:
+    cmd: "yay -S --noconfirm --needed {{ item }}"
+  loop: "{{ aur_packages }}"
+  register: aur_result
+  changed_when: "'there is nothing to do' not in aur_result.stdout"
+  ignore_errors: true
