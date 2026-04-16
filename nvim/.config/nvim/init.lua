@@ -1097,13 +1097,25 @@ require("lazy").setup({
 			local harpoon = require("harpoon")
 			harpoon:setup()
 
-			vim.keymap.set("n", "<leader>a", function() harpoon:list():add() end, { desc = "Harpoon add file" })
-			vim.keymap.set("n", "<leader>e", function() harpoon.ui:toggle_quick_menu(harpoon:list()) end, { desc = "Harpoon menu" })
+			vim.keymap.set("n", "<leader>a", function()
+				harpoon:list():add()
+			end, { desc = "Harpoon add file" })
+			vim.keymap.set("n", "<leader>e", function()
+				harpoon.ui:toggle_quick_menu(harpoon:list())
+			end, { desc = "Harpoon menu" })
 
-			vim.keymap.set("n", "<C-1>", function() harpoon:list():select(1) end, { desc = "Harpoon file 1" })
-			vim.keymap.set("n", "<C-2>", function() harpoon:list():select(2) end, { desc = "Harpoon file 2" })
-			vim.keymap.set("n", "<C-3>", function() harpoon:list():select(3) end, { desc = "Harpoon file 3" })
-			vim.keymap.set("n", "<C-4>", function() harpoon:list():select(4) end, { desc = "Harpoon file 4" })
+			vim.keymap.set("n", "<C-1>", function()
+				harpoon:list():select(1)
+			end, { desc = "Harpoon file 1" })
+			vim.keymap.set("n", "<C-2>", function()
+				harpoon:list():select(2)
+			end, { desc = "Harpoon file 2" })
+			vim.keymap.set("n", "<C-3>", function()
+				harpoon:list():select(3)
+			end, { desc = "Harpoon file 3" })
+			vim.keymap.set("n", "<C-4>", function()
+				harpoon:list():select(4)
+			end, { desc = "Harpoon file 4" })
 		end,
 	},
 
@@ -1152,6 +1164,24 @@ require("lazy").setup({
 			vim.g.vimtex_view_method = "zathura"
 			vim.g.vimtex_compiler_method = "latexmk"
 		end,
+	},
+	-- ============================================================
+	-- Zen Mode: Centered margins and soft wrapping
+	-- ============================================================
+	{
+		"folke/zen-mode.nvim",
+		keys = {
+			{ "<leader>z", "<cmd>ZenMode<cr>", desc = "Toggle [Z]en Mode" },
+		},
+		opts = {
+			window = {
+				width = 120, -- This sets your exact 100-character width
+				options = {
+					linebreak = true, -- Soft wrap at word boundaries
+					wrap = true, -- Enable visual wrapping
+				},
+			},
+		},
 	},
 }, { ---@diagnostic disable-line: missing-fields
 	ui = {
