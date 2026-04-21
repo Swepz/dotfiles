@@ -1183,6 +1183,22 @@ require("lazy").setup({
 			},
 		},
 	},
+	-- ============================================================
+	-- Markdown Preview (Live in browser)
+	-- ============================================================
+	{
+		"iamcco/markdown-preview.nvim",
+		cmd = { "MarkdownPreviewToggle", "MarkdownPreview", "MarkdownPreviewStop" },
+		build = "cd app && npx --yes yarn install",
+		init = function()
+			vim.g.mkdp_filetypes = { "markdown" }
+		end,
+		ft = { "markdown" },
+		keys = {
+			-- Here is your keybinding: Space + m + p
+			{ "<leader>mp", "<cmd>MarkdownPreviewToggle<cr>", desc = "Toggle [M]arkdown [P]review" },
+		},
+	},
 }, { ---@diagnostic disable-line: missing-fields
 	ui = {
 		-- If you are using a Nerd Font: set icons to an empty table which will use the
