@@ -159,7 +159,9 @@
     "on-click": "missioncenter"
   },
   "hyprland/language": {
-    "format": "/ K {short}"
+    "format": "K {short}",
+    "tooltip-format": "Layout: {long}",
+    "on-click": "hyprctl switchxkblayout all next"
   },
   // Group Hardware
   "group/hardware": {
@@ -173,8 +175,7 @@
       "custom/system",
       "disk",
       "cpu",
-      "memory",
-      "hyprland/language"
+      "memory"
     ]
   },
   // Group Tools

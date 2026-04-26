@@ -16,3 +16,5 @@ set -x MANPAGER "less -R --use-color -Dd+r -Du+b"
 set -x MANROFFOPT "-P -c"
 
 export CLAUDE_CODE_DISABLE_BACKGROUND_TASKS=1
+export IS_DEMO=1
+export CLAUDE_CODE_HIDE_ACCOUNT_INFO=1
