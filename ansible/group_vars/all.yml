@@ -19,6 +19,7 @@ stow_packages:
   - waypaper
   - waytrogen
   - wlogout
+  - zathura
   - zed
 
 base_packages:

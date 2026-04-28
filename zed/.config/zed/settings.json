@@ -7,6 +7,15 @@
 // custom settings, run `zed: open default settings` from the
 // command palette (cmd-shift-p / ctrl-shift-p)
 {
+  "terminal": {
+    "font_size": 16.0,
+    "font_family": "FiraCode Nerd Font"
+  },
+  "agent_servers": {
+    "codex-acp": {
+      "type": "registry"
+    }
+  },
   "outline_panel": {
     "dock": "left"
   },
@@ -39,8 +48,8 @@
   "ui_font_size": 16,
   "buffer_font_size": 16.0,
   "theme": {
-    "mode": "dark",
-    "light": "Mnemonic Light Prophecy",
+    "mode": "light",
+    "light": "One Light",
     "dark": "Shades Of Purple"
   }
 }

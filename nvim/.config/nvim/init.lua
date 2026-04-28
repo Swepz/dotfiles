@@ -93,6 +93,43 @@ vim.g.maplocalleader = " "
 -- Set to true if you have a Nerd Font installed and selected in the terminal
 vim.g.have_nerd_font = true
 
+local default_colorscheme = "tokyonight-moon"
+local colorscheme_state_file = vim.fn.stdpath("state") .. "/colorscheme"
+
+local function read_colorscheme()
+	local ok, lines = pcall(vim.fn.readfile, colorscheme_state_file)
+	if ok and lines[1] and vim.trim(lines[1]) ~= "" then
+		return vim.trim(lines[1])
+	end
+	return default_colorscheme
+end
+
+local function save_colorscheme(name)
+	if not name or name == "" then
+		return
+	end
+
+	vim.fn.mkdir(vim.fn.fnamemodify(colorscheme_state_file, ":h"), "p")
+	local ok, err = pcall(vim.fn.writefile, { name }, colorscheme_state_file)
+	if not ok then
+		vim.notify("Could not save colorscheme: " .. tostring(err), vim.log.levels.WARN)
+	end
+end
+
+local function apply_colorscheme(name)
+	if pcall(vim.cmd.colorscheme, name) then
+		return name
+	end
+
+	if name ~= default_colorscheme then
+		vim.notify("Could not load colorscheme '" .. name .. "', using " .. default_colorscheme, vim.log.levels.WARN)
+	end
+
+	if pcall(vim.cmd.colorscheme, default_colorscheme) then
+		return default_colorscheme
+	end
+end
+
 -- [[ Setting options ]]
 -- See `:help vim.o`
 -- NOTE: You can change these options as you wish!
@@ -191,6 +228,12 @@ vim.diagnostic.config({
 })
 
 vim.keymap.set("n", "<leader>q", vim.diagnostic.setloclist, { desc = "Open diagnostic [Q]uickfix list" })
+
+-- Toggle line wrap
+vim.keymap.set("n", "<leader>tw", function()
+	vim.wo.wrap = not vim.wo.wrap
+	vim.notify("wrap: " .. tostring(vim.wo.wrap))
+end, { desc = "[T]oggle [W]rap" })
 
 -- Exit terminal mode in the builtin terminal with a shortcut that is a bit easier
 -- for people to discover. Otherwise, you normally need to press <C-\><C-n>, which
@@ -507,7 +550,27 @@ require("lazy").setup({
 			end, { desc = "[S]earch [N]eovim files" })
 
 			vim.keymap.set("n", "<leader>st", function()
-				builtin.colorscheme({ enable_preview = true })
+				local actions = require("telescope.actions")
+				local action_state = require("telescope.actions.state")
+
+				builtin.colorscheme({
+					enable_preview = true,
+					attach_mappings = function(prompt_bufnr)
+						actions.select_default:replace(function()
+							local selection = action_state.get_selected_entry()
+							if not selection then
+								return
+							end
+
+							local colorscheme = selection.value
+							actions.close(prompt_bufnr)
+							if apply_colorscheme(colorscheme) == colorscheme then
+								save_colorscheme(colorscheme)
+							end
+						end)
+						return true
+					end,
+				})
 			end, { desc = "[S]earch [T]hemes" })
 		end,
 	},
@@ -857,7 +920,11 @@ require("lazy").setup({
 					comments = { italic = false },
 				},
 			})
-			vim.cmd.colorscheme("tokyonight-moon")
+			local colorscheme = read_colorscheme()
+			local applied_colorscheme = apply_colorscheme(colorscheme)
+			if applied_colorscheme and applied_colorscheme ~= colorscheme then
+				save_colorscheme(applied_colorscheme)
+			end
 		end,
 	},
 
@@ -1163,6 +1230,8 @@ require("lazy").setup({
 		init = function()
 			vim.g.vimtex_view_method = "zathura"
 			vim.g.vimtex_compiler_method = "latexmk"
+			vim.g.vimtex_syntax_enabled = 0
+			vim.g.vimtex_syntax_conceal_disable = 1
 		end,
 	},
 	-- ============================================================
@@ -1181,6 +1250,14 @@ require("lazy").setup({
 					wrap = true, -- Enable visual wrapping
 				},
 			},
+			-- Markview's table rendering misaligns with wrap=true (known limitation),
+			-- so disable inline rendering during zen mode for clean prose view.
+			on_open = function()
+				pcall(vim.cmd, "Markview Disable")
+			end,
+			on_close = function()
+				pcall(vim.cmd, "Markview Enable")
+			end,
 		},
 	},
 	-- ============================================================
@@ -1197,6 +1274,29 @@ require("lazy").setup({
 		keys = {
 			-- Here is your keybinding: Space + m + p
 			{ "<leader>mp", "<cmd>MarkdownPreviewToggle<cr>", desc = "Toggle [M]arkdown [P]review" },
+		},
+	},
+
+	-- ============================================================
+	-- Markdown inline rendering (rich text inside the buffer)
+	-- LaTeX math, YAML frontmatter, callouts, tables, code blocks
+	-- ============================================================
+	{
+		"OXY2DEV/markview.nvim",
+		ft = { "markdown" },
+		dependencies = { "nvim-tree/nvim-web-devicons" },
+		opts = function()
+			local presets = require("markview.presets")
+			return {
+				markdown = {
+					headings = presets.headings.glow,
+					horizontal_rules = presets.horizontal_rules.thick,
+					tables = presets.tables.rounded,
+				},
+			}
+		end,
+		keys = {
+			{ "<leader>mr", "<cmd>Markview Toggle<cr>", desc = "Toggle [M]arkview [R]ender" },
 		},
 	},
 }, { ---@diagnostic disable-line: missing-fields

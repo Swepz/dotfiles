@@ -1,0 +1,5 @@
+set selection-clipboard clipboard
+set recolor false
+set recolor-lightcolor "#ffffff"
+set recolor-darkcolor "#000000"
+set render-loading false
