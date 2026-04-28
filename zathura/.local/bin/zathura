@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+export GDK_GL=disable
+export GDK_RENDERING=image
+export LIBGL_ALWAYS_SOFTWARE=1
+
+exec -a zathura /usr/bin/zathura "$@"
