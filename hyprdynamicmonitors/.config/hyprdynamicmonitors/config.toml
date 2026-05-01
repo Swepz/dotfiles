@@ -11,7 +11,7 @@
 # State coverage:
 #   any lid,  external   -> docked       (template handles lid + per-monitor tuning)
 #   lid open,   solo     -> laptop_lid_open  (eDP only)
-#   lid closed, solo     -> lid_closed_solo  (eDP kept on + systemctl suspend)
+#   lid closed, solo     -> lid_closed_solo  (eDP kept on + gated sleep)
 #   anything unexpected  -> fallback         (enable whatever is present)
 
 [general]
@@ -101,15 +101,14 @@ lid_state = "Opened"
 description = "Samsung Display Corp. ATNA60KA02-0"
 monitor_tag = "laptop"
 
-# Laptop solo + lid closed: suspend. We keep eDP enabled in the config (so
-# Hyprland never hits "zero monitors" if the suspend is delayed/aborted) and
-# fire systemctl suspend as the post-apply hook. On resume + lid open the
-# profile will switch back to laptop_lid_open automatically.
+# Laptop solo + lid closed: run the clamshell close handler. It only calls
+# systemctl suspend when systemd suspend is configured for the freeze backend;
+# otherwise it locks the session instead of entering the broken s2idle path.
 # Score: 1 desc match (5) + lid bonus (2) = 7
 [profiles.lid_closed_solo]
 config_file = "hyprconfigs/lid-closed-solo.conf"
 config_file_type = "static"
-post_apply_exec = "systemctl suspend"
+post_apply_exec = "/home/swepz/.config/hypr/scripts/clamshell-close.sh"
 
 [profiles.lid_closed_solo.conditions]
 lid_state = "Closed"

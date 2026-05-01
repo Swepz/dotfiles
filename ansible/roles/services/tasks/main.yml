@@ -20,3 +20,78 @@
     state: started
   loop: "{{ enabled_services }}"
   ignore_errors: true
+
+- name: Keep logind out of lid-close handling
+  become: true
+  ansible.builtin.copy:
+    dest: /etc/systemd/logind.conf.d/90-dotfiles-lid-switch.conf
+    owner: root
+    group: root
+    mode: "0644"
+    content: |
+      [Login]
+      HandleLidSwitch=ignore
+      HandleLidSwitchExternalPower=ignore
+      HandleLidSwitchDocked=ignore
+
+- name: Ensure systemd sleep drop-in directory exists
+  become: true
+  ansible.builtin.file:
+    path: /etc/systemd/sleep.conf.d
+    state: directory
+    owner: root
+    group: root
+    mode: "0755"
+
+- name: Use freeze backend for systemd suspend
+  become: true
+  ansible.builtin.copy:
+    dest: /etc/systemd/sleep.conf.d/90-dotfiles-suspend-freeze.conf
+    owner: root
+    group: root
+    mode: "0644"
+    content: |
+      [Sleep]
+      SuspendState=freeze
+
+- name: Remove experimental NVIDIA S0ix power-management override
+  become: true
+  ansible.builtin.file:
+    path: /etc/modprobe.d/nvidia-s0ix.conf
+    state: absent
+  register: nvidia_s0ix_removed
+
+- name: Read systemd-boot kernel command line
+  become: true
+  ansible.builtin.slurp:
+    src: /etc/kernel/cmdline
+  register: kernel_cmdline
+
+- name: Remove hibernate resume device from kernel command line
+  become: true
+  ansible.builtin.copy:
+    dest: /etc/kernel/cmdline
+    owner: root
+    group: root
+    mode: "0644"
+    content: "{{ (kernel_cmdline.content | b64decode | trim | regex_replace('(^|\\s)resume=\\S+', '') | trim) }}\n"
+  register: kernel_cmdline_resume_removed
+  when: "'resume=' in (kernel_cmdline.content | b64decode)"
+
+- name: Remove hibernate resume hook before filesystems in mkinitcpio
+  become: true
+  ansible.builtin.replace:
+    path: /etc/mkinitcpio.conf
+    regexp: '\s+resume(?=\s+filesystems\b)'
+    replace: ''
+  register: mkinitcpio_resume_hook_removed
+
+- name: Rebuild initramfs and UKIs after power-management changes
+  become: true
+  ansible.builtin.command:
+    cmd: mkinitcpio -P
+  changed_when: true
+  when:
+    - (nvidia_s0ix_removed.changed | default(false))
+      or (kernel_cmdline_resume_removed.changed | default(false))
+      or (mkinitcpio_resume_hook_removed.changed | default(false))
