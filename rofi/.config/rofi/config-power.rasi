@@ -1,0 +1,78 @@
+configuration {
+    font: "Fira Sans 12";
+    show-icons: false;
+    hover-select: false;
+}
+
+@theme "~/.config/rofi/colors.rasi"
+
+window {
+    width: 20em;
+    location: center;
+    anchor: center;
+    padding: 0em;
+    margin: 0em;
+    border: 1px;
+    border-color: @outline;
+    border-radius: 14px;
+    background-color: @surface;
+    transparency: "real";
+}
+
+mainbox {
+    padding: 0em;
+    spacing: 0em;
+    children: [ "inputbar", "listview", "message" ];
+    background-color: transparent;
+}
+
+inputbar {
+    padding: 0.9em 1em;
+    children: [ "prompt", "entry" ];
+    background-color: @surface-container;
+    border-radius: 14px 14px 0px 0px;
+}
+
+prompt {
+    text-color: @primary;
+    padding: 0em 0.7em 0em 0em;
+}
+
+entry {
+    placeholder: "Choose action";
+    placeholder-color: @on-surface-variant;
+    text-color: @on-surface;
+    background-color: transparent;
+}
+
+listview {
+    padding: 0.45em;
+    lines: 5;
+    columns: 1;
+    fixed-height: true;
+    scrollbar: false;
+    background-color: transparent;
+}
+
+element {
+    padding: 0.75em 0.9em;
+    border-radius: 10px;
+    background-color: transparent;
+    text-color: @on-surface;
+}
+
+element selected.normal {
+    background-color: @primary;
+    text-color: @on-primary;
+}
+
+element-text {
+    background-color: inherit;
+    text-color: inherit;
+}
+
+message {
+    padding: 0em 1em 0.8em 1em;
+    background-color: transparent;
+    text-color: @on-surface-variant;
+}

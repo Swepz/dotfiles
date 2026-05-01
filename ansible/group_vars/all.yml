@@ -19,9 +19,12 @@ stow_packages:
   - waybar
   - waypaper
   - waytrogen
-  - wlogout
   - zathura
   - zed
+
+retired_packages:
+  - wlogout
+  - wlogout-debug
 
 base_packages:
   - base
@@ -183,13 +186,13 @@ aur_packages:
   - etcher-bin
   - grimblast-git
   - hyprdynamicmonitors-bin  # monitor/lid/power aware profile manager for Hyprland (clamshell mode)
+  - hyprshutdown
   - pacseek
   - python-pywalfox
   - sddm-sugar-candy-git
   - visual-studio-code-insiders-bin
   - waypaper
   - waytrogen
-  - wlogout
   - zen-browser-bin
 
 enabled_services:

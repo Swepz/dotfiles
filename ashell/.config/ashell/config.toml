@@ -5,7 +5,7 @@ position = "Top"
 [modules]
 left = [["appLauncher", "Updates", "Workspaces"]]
 center = ["WindowTitle"]
-right = ["Tray", "MediaPlayer", "SystemInfo", ["Tempo", "Privacy", "Settings"]]
+right = [["MediaPlayer", "Tray", "SystemInfo", "Tempo", "Privacy", "Settings"]]
 
 [updates]
 check_cmd = "checkupdates; yay -Qua"
@@ -24,7 +24,11 @@ command = "~/.config/hypr/scripts/launcher.sh"
 
 [window_title]
 mode = "Title"
-truncate_title_after_length = 100
+truncate_title_after_length = 60
+
+[media_player]
+indicator_format = "Icon"
+max_title_length = 60
 
 [system_info]
 indicators = ["Cpu", "Memory", "Temperature"]
@@ -80,7 +84,8 @@ indicators = [
 
 [appearance]
 scale_factor = 1.25
-style = "Islands"
+style = "Solid"
+opacity = 0.8
 
 primary_color = "#7aa2f7"
 success_color = "#9ece6a"
