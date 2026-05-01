@@ -4,6 +4,7 @@ dotfiles_dest: "{{ ansible_facts.env.HOME }}/.dotfiles"
 
 stow_packages:
   - alacritty
+  - ashell
   - dunst
   - fish
   - gh
@@ -95,7 +96,9 @@ desktop_packages:
   - brightnessctl
   - imagemagick
   - matugen
+  - playerctl
   - pavucontrol
+  - blueman
   - network-manager-applet
   - qt5-wayland
   - qt6ct
@@ -175,6 +178,7 @@ network_packages:
 
 aur_packages:
   - antigravity
+  - ashell
   - bibata-cursor-theme
   - etcher-bin
   - grimblast-git
