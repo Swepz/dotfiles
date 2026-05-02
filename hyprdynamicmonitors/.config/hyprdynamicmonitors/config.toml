@@ -65,7 +65,7 @@ lid_state_match = 2
 # --- Fallback when no profile matches (e.g. a new unknown monitor) ---
 [fallback_profile]
 config_file = "hyprconfigs/fallback.conf"
-config_file_type = "static"
+config_file_type = "template"
 
 # ============================================================
 # PROFILES
@@ -92,7 +92,7 @@ monitor_tag = "external"
 # Score: 1 desc match (5) + lid bonus (2) = 7
 [profiles.laptop_lid_open]
 config_file = "hyprconfigs/laptop-only.conf"
-config_file_type = "static"
+config_file_type = "template"
 
 [profiles.laptop_lid_open.conditions]
 lid_state = "Opened"
@@ -107,7 +107,7 @@ monitor_tag = "laptop"
 # Score: 1 desc match (5) + lid bonus (2) = 7
 [profiles.lid_closed_solo]
 config_file = "hyprconfigs/lid-closed-solo.conf"
-config_file_type = "static"
+config_file_type = "template"
 post_apply_exec = "/home/swepz/.config/hypr/scripts/clamshell-close.sh"
 
 [profiles.lid_closed_solo.conditions]
