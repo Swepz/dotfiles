@@ -23,6 +23,8 @@ stow_packages:
   - zed
 
 retired_packages:
+  - linux
+  - linux-headers
   - wlogout
   - wlogout-debug
 
@@ -43,9 +45,9 @@ base_packages:
   - pacman-contrib
   - smartmontools
   - usbutils
-  - linux
+  - linux-lts
   - linux-firmware
-  - linux-headers
+  - linux-lts-headers
   - lvm2
   - grub
   - intel-ucode
