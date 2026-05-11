@@ -93,6 +93,7 @@ desktop_packages:
   - dunst
   - swaync
   - cliphist
+  - gpu-screen-recorder
   - nwg-dock-hyprland
   - xdg-desktop-portal-hyprland
   - xdg-desktop-portal-gnome

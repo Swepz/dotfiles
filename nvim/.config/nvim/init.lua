@@ -139,7 +139,7 @@ end
 vim.o.number = true
 -- You can also add relative line numbers, to help with jumping.
 --  Experiment for yourself to see if you like it!
--- vim.o.relativenumber = true
+vim.o.relativenumber = true
 
 -- Enable mouse mode, can be useful for resizing splits for example!
 vim.o.mouse = "a"
@@ -276,6 +276,12 @@ vim.api.nvim_create_autocmd("TextYankPost", {
 	callback = function()
 		vim.hl.on_yank()
 	end,
+})
+
+vim.filetype.add({
+	extension = {
+		simba = "pascal",
+	},
 })
 
 -- [[ Install `lazy.nvim` plugin manager ]]
@@ -1026,6 +1032,7 @@ require("lazy").setup({
 				"make",
 				"markdown",
 				"markdown_inline",
+				"pascal",
 				"python",
 				"query",
 				"rust",
