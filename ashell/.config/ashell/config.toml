@@ -5,7 +5,7 @@ position = "Top"
 [modules]
 left = [["appLauncher", "Updates", "Workspaces"]]
 center = ["WindowTitle"]
-right = [["MediaPlayer", "Tray", "Recording", "SystemInfo", "Tempo", "Privacy", "Settings"]]
+right = [["MediaPlayer", "Tray", "SystemInfo", "Tempo", "Privacy", "Settings"]]
 
 [updates]
 check_cmd = "checkupdates; yay -Qua"
@@ -90,6 +90,12 @@ indicators = [
   "Battery",
   "Brightness",
 ]
+
+[[settings.CustomButton]]
+name = "Walk Mode"
+icon = "󰌢"
+command = "~/.config/ashell/walk-mode.sh toggle"
+status_command = "~/.config/ashell/walk-mode.sh status"
 
 [appearance]
 scale_factor = 1.25

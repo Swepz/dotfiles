@@ -12,6 +12,9 @@
     "font_family": "FiraCode Nerd Font"
   },
   "agent_servers": {
+    "claude-acp": {
+      "type": "registry"
+    },
     "codex-acp": {
       "type": "registry"
     }
@@ -48,7 +51,7 @@
   "ui_font_size": 16,
   "buffer_font_size": 16.0,
   "theme": {
-    "mode": "light",
+    "mode": "dark",
     "light": "One Light",
     "dark": "Ayu Mirage"
   }

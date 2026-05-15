@@ -10,7 +10,7 @@
 # - First invocation: pick a region with slurp, start recording to ~/Videos/rec-<ts>.mp4
 # - Second invocation (while recording): SIGINT gpu-screen-recorder to flush the file cleanly
 # - flock prevents a double-press race
-# - Pokes waybar's custom/recording module via SIGRTMIN+8 so the indicator updates instantly
+# - Refreshes bar indicators so recording controls only appear while active
 
 set -u
 
@@ -20,6 +20,7 @@ LOGFILE=/tmp/gpu-screen-recorder.log
 STATEFILE=/tmp/gpu-screen-recorder.status
 OUTDIR="$HOME/Videos"
 WAYBAR_SIGNAL=8
+ASHELL_CONFIG_RENDER="${ASHELL_CONFIG_RENDER:-$HOME/.config/ashell/render-config.sh}"
 
 mkdir -p "$OUTDIR"
 
@@ -28,6 +29,7 @@ exec 9>"$LOCK"
 flock -n 9 || exit 0
 
 refresh_recording_indicators() {
+    "$ASHELL_CONFIG_RENDER" 2>/dev/null || true
     printf '%s\n' "$(date +%s)" >>"$STATEFILE" 2>/dev/null || true
     pkill -RTMIN+${WAYBAR_SIGNAL} waybar 2>/dev/null || true
 }
@@ -84,5 +86,5 @@ if ! kill -0 "$pid" 2>/dev/null; then
     exit 1
 fi
 
-notify-send -t 2000 -i media-record "Recording started" "Click the ● REC indicator or press the hotkey again to stop"
+notify-send -t 2000 -i media-record "Recording started" "Click the REC indicator or press the hotkey again to stop"
 refresh_recording_indicators

@@ -1,0 +1,6 @@
+[Unit]
+Description=Keep laptop awake while walking with the lid closed
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/systemd-inhibit --what=sleep:idle:handle-lid-switch --mode=block --who=clamshell-walk-mode "--why=Keep laptop awake while walking between meetings" /usr/bin/sleep infinity
