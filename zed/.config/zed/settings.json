@@ -9,35 +9,44 @@
 {
   "terminal": {
     "font_size": 16.0,
-    "font_family": "FiraCode Nerd Font"
+    "font_family": "FiraCode Nerd Font",
   },
   "agent_servers": {
     "claude-acp": {
-      "type": "registry"
+      "default_config_options": {
+        "model": "default"
+      },
+      "favorite_config_option_values": {
+        "model": [
+          "default"
+        ]
+      },
+      "type": "registry",
     },
     "codex-acp": {
-      "type": "registry"
-    }
+      "type": "registry",
+    },
   },
   "outline_panel": {
-    "dock": "left"
+    "dock": "left",
   },
   "collaboration_panel": {
-    "dock": "left"
+    "dock": "left",
   },
   "agent": {
+    "button": true,
     "dock": "right",
     "favorite_models": [],
-    "model_parameters": []
+    "model_parameters": [],
   },
   "git_panel": {
-    "dock": "left"
+    "dock": "left",
   },
   "project_panel": {
-    "dock": "right"
+    "dock": "right",
   },
   "status_bar": {
-    "active_encoding_button": "non_utf8"
+    "active_encoding_button": "non_utf8",
   },
   "buffer_font_weight": 550.0,
   "buffer_line_height": "standard",
@@ -46,13 +55,13 @@
   "icon_theme": {
     "mode": "light",
     "light": "Colored Zed Icons Theme Dark",
-    "dark": "Colored Zed Icons Theme Dark"
+    "dark": "Colored Zed Icons Theme Dark",
   },
-  "ui_font_size": 16,
+  "ui_font_size": 20,
   "buffer_font_size": 16.0,
   "theme": {
     "mode": "dark",
-    "light": "One Light",
-    "dark": "Ayu Mirage"
-  }
+    "light": "Catppuccin Latte",
+    "dark": "Shades Of Purple",
+  },
 }
