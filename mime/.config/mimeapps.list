@@ -1,0 +1,32 @@
+[Default Applications]
+inode/directory=org.gnome.Nautilus.desktop
+application/x-shellscript=dev.zed.Zed.desktop
+application/x-sh=dev.zed.Zed.desktop
+x-scheme-handler/claude-cli=claude-code-url-handler.desktop
+x-scheme-handler/http=userapp-Zen-0AIMN3.desktop
+x-scheme-handler/https=userapp-Zen-0AIMN3.desktop
+x-scheme-handler/chrome=userapp-Zen-0AIMN3.desktop
+text/html=userapp-Zen-0AIMN3.desktop
+application/x-extension-htm=userapp-Zen-0AIMN3.desktop
+application/x-extension-html=userapp-Zen-0AIMN3.desktop
+application/x-extension-shtml=userapp-Zen-0AIMN3.desktop
+application/xhtml+xml=userapp-Zen-0AIMN3.desktop
+application/x-extension-xhtml=userapp-Zen-0AIMN3.desktop
+application/x-extension-xht=userapp-Zen-0AIMN3.desktop
+x-scheme-handler/discord=vesktop.desktop
+image/png=org.kde.gwenview.desktop
+application/pdf=org.pwmt.zathura-pdf-poppler.desktop
+
+[Added Associations]
+x-scheme-handler/http=userapp-Zen-0AIMN3.desktop;zen.desktop;
+x-scheme-handler/https=userapp-Zen-0AIMN3.desktop;zen.desktop;
+x-scheme-handler/chrome=userapp-Zen-0AIMN3.desktop;zen.desktop;
+text/html=zen.desktop;userapp-Zen-0AIMN3.desktop;
+application/x-extension-htm=zen.desktop;userapp-Zen-0AIMN3.desktop;
+application/x-extension-html=zen.desktop;userapp-Zen-0AIMN3.desktop;
+application/x-extension-shtml=zen.desktop;userapp-Zen-0AIMN3.desktop;
+application/xhtml+xml=zen.desktop;userapp-Zen-0AIMN3.desktop;
+application/x-extension-xhtml=zen.desktop;userapp-Zen-0AIMN3.desktop;
+application/x-extension-xht=zen.desktop;userapp-Zen-0AIMN3.desktop;
+image/png=org.kde.gwenview.desktop;
+application/pdf=org.pwmt.zathura-pdf-poppler.desktop;

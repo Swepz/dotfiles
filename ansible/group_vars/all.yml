@@ -14,6 +14,7 @@ stow_packages:
   - hypr
   - hyprdynamicmonitors
   - kitty
+  - mime
   - nvim
   - rofi
   - waybar
