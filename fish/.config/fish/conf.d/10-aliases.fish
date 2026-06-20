@@ -12,6 +12,8 @@ alias ff='fastfetch'
 alias ls='eza -a --icons=always'
 alias ll='eza -l --icons=always'
 alias lt='eza -a --tree --level=1 --icons=always'
+# color directories cyan (bold cyan) rather than the default bold-blue slot
+set -gx EZA_COLORS "di=1;36"
 alias shutdown='systemctl poweroff'
 alias v='$EDITOR'
 alias vim='$EDITOR'
