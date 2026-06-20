@@ -104,20 +104,20 @@ scale_factor = 1.25
 style = "Solid"
 opacity = 0.8
 
-primary_color = "#7aa2f7"
-success_color = "#9ece6a"
-text_color = "#a9b1d6"
-workspace_colors = ["#7aa2f7", "#9ece6a"]
-special_workspace_colors = ["#7aa2f7", "#9ece6a"]
+primary_color = "#36f9f6"
+success_color = "#72f1b8"
+text_color = "#f8f8f2"
+workspace_colors = ["#36f9f6", "#ff7edb"]
+special_workspace_colors = ["#c792ea", "#fede5d"]
 
 [appearance.danger_color]
-base = "#f7768e"
-weak = "#e0af68"
+base = "#fe4450"
+weak = "#ff8b39"
 
 [appearance.background_color]
-base = "#1a1b26"
-weak = "#24273a"
-strong = "#414868"
+base = "#262335"
+weak = "#2a2440"
+strong = "#463465"
 
 [appearance.secondary_color]
-base = "#0c0d14"
+base = "#1a1626"

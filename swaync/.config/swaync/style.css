@@ -1,0 +1,188 @@
+/* Synthwave '84 — swaync */
+@define-color bg        #262335;
+@define-color bg-alt    #2a2440;
+@define-color surface   #322a4a;
+@define-color surface2  #3b3052;
+@define-color text      #f8f8f2;
+@define-color muted     #848bbd;
+@define-color cyan      #36f9f6;
+@define-color pink      #ff7edb;
+@define-color purple    #c792ea;
+@define-color red       #fe4450;
+@define-color yellow    #fede5d;
+@define-color mint      #72f1b8;
+
+* {
+  font-family: "Fira Sans", "FiraCode Nerd Font", sans-serif;
+  font-size: 14px;
+}
+
+/* ---------- Notification popups ---------- */
+.notification-row {
+  outline: none;
+}
+
+.notification-row:focus,
+.notification-row:hover {
+  background: transparent;
+}
+
+.notification {
+  border-radius: 12px;
+  margin: 6px 12px;
+  padding: 0;
+  border: 2px solid @cyan;
+  background: @bg;
+  box-shadow: 0 0 8px rgba(54, 249, 246, 0.4);
+}
+
+.notification.critical {
+  border-color: @red;
+  box-shadow: 0 0 8px rgba(254, 68, 80, 0.5);
+}
+
+.notification-content {
+  background: transparent;
+  padding: 10px;
+  border-radius: 12px;
+  color: @text;
+}
+
+.summary {
+  font-weight: bold;
+  color: @cyan;
+}
+
+.body {
+  color: @text;
+}
+
+.time {
+  color: @muted;
+  font-size: 12px;
+}
+
+.close-button {
+  background: @red;
+  color: @bg;
+  border-radius: 50%;
+  margin: 6px;
+  padding: 2px;
+}
+
+.close-button:hover {
+  background: @pink;
+}
+
+.notification-action,
+.notification-default-action {
+  background: @surface;
+  color: @text;
+  border: 1px solid @purple;
+  border-radius: 8px;
+  margin: 4px;
+}
+
+.notification-action:hover {
+  background: @surface2;
+  color: @pink;
+}
+
+/* ---------- Control center ---------- */
+.control-center {
+  background: @bg;
+  border: 2px solid @cyan;
+  border-radius: 16px;
+  color: @text;
+  padding: 12px;
+  box-shadow: 0 0 12px rgba(54, 249, 246, 0.3);
+}
+
+.control-center-list {
+  background: transparent;
+}
+
+.control-center .notification {
+  margin: 6px 0;
+}
+
+/* ---------- Widgets ---------- */
+.widget-title {
+  color: @cyan;
+  font-size: 16px;
+  font-weight: bold;
+  margin: 8px;
+}
+
+.widget-title > button {
+  background: @surface;
+  color: @pink;
+  border: 1px solid @pink;
+  border-radius: 8px;
+  padding: 4px 10px;
+}
+
+.widget-title > button:hover {
+  background: @pink;
+  color: @bg;
+}
+
+.widget-dnd {
+  color: @text;
+  margin: 8px;
+}
+
+.widget-dnd > switch {
+  background: @surface;
+  border-radius: 12px;
+}
+
+.widget-dnd > switch:checked {
+  background: @cyan;
+}
+
+.widget-dnd > switch slider {
+  background: @text;
+  border-radius: 12px;
+}
+
+.widget-label {
+  color: @muted;
+  margin: 8px;
+}
+
+.widget-mpris,
+.widget-volume,
+.widget-backlight {
+  background: @bg-alt;
+  border-radius: 12px;
+  padding: 8px;
+  margin: 8px;
+  color: @text;
+}
+
+.widget-buttons-grid {
+  background: @bg-alt;
+  border-radius: 12px;
+  padding: 8px;
+  margin: 8px;
+}
+
+.widget-buttons-grid > flowbox > flowboxchild > button {
+  background: @surface;
+  color: @cyan;
+  border-radius: 10px;
+}
+
+.widget-buttons-grid > flowbox > flowboxchild > button:hover {
+  background: @cyan;
+  color: @bg;
+}
+
+trough highlight {
+  background: @cyan;
+}
+
+slider {
+  background: @text;
+}

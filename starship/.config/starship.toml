@@ -1,0 +1,58 @@
+# Synthwave '84 — color overrides only (default prompt layout preserved)
+palette = "synthwave84"
+
+[palettes.synthwave84]
+cyan = "#36f9f6"
+pink = "#ff7edb"
+purple = "#c792ea"
+red = "#fe4450"
+orange = "#ff8b39"
+yellow = "#fede5d"
+green = "#72f1b8"
+blue = "#03edf9"
+muted = "#848bbd"
+
+[character]
+success_symbol = "[❯](bold cyan)"
+error_symbol = "[❯](bold red)"
+vimcmd_symbol = "[❮](bold purple)"
+
+[directory]
+style = "bold cyan"
+
+[git_branch]
+style = "bold pink"
+
+[git_status]
+style = "bold yellow"
+
+[git_state]
+style = "bold purple"
+
+[cmd_duration]
+style = "muted"
+
+[hostname]
+style = "bold purple"
+
+[username]
+style_user = "bold green"
+style_root = "bold red"
+
+[time]
+style = "muted"
+
+[python]
+style = "bold yellow"
+
+[nodejs]
+style = "bold green"
+
+[rust]
+style = "bold orange"
+
+[golang]
+style = "bold cyan"
+
+[package]
+style = "bold pink"
