@@ -1,6 +1,8 @@
 log_level = "warn"
 #outputs = { Targets = ["eDP-1"] }
 position = "Top"
+# Force metric units (°C, km/h) + English date names; overrides en_US locale for the bar only
+region = "en_GB.UTF-8"
 
 [modules]
 left = [["appLauncher", "Updates", "Workspaces"]]
@@ -41,7 +43,7 @@ max_title_length = 60
 
 [system_info]
 indicators = ["Cpu", "Memory", "Temperature"]
-interval = 5
+interval = 2
 
 [system_info.cpu]
 warn_threshold = 60
