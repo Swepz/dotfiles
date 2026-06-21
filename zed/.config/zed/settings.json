@@ -14,6 +14,8 @@
   "agent_servers": {
     "claude-acp": {
       "default_config_options": {
+        "effort": "max",
+        "mode": "bypassPermissions",
         "model": "default"
       },
       "favorite_config_option_values": {
@@ -34,8 +36,9 @@
     "dock": "left",
   },
   "agent": {
+    "flexible": true,
     "button": true,
-    "dock": "right",
+    "dock": "left",
     "favorite_models": [],
     "model_parameters": [],
   },
@@ -57,7 +60,7 @@
     "light": "Colored Zed Icons Theme Dark",
     "dark": "Colored Zed Icons Theme Dark",
   },
-  "ui_font_size": 20,
+  "ui_font_size": 16.0,
   "buffer_font_size": 16.0,
   "theme": {
     "mode": "dark",
