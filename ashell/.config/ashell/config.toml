@@ -7,7 +7,7 @@ region = "en_GB.UTF-8"
 [modules]
 left = [["appLauncher", "Updates", "Workspaces"]]
 center = ["WindowTitle"]
-right = [["MediaPlayer", "Tray", "SystemInfo", "Tempo", "Privacy", "Settings"]]
+right = [["MediaPlayer", "Tray", "SystemInfo", "Tempo", "Privacy", "CustomNotifications", "Settings"]]
 
 [updates]
 check_cmd = "checkupdates; yay -Qua"
@@ -32,6 +32,15 @@ command = "~/.config/hypr/scripts/toggle-record.sh"
 listen_cmd = "~/.config/ashell/recording.sh"
 alert = "recording"
 icons.'recording' = "■"
+
+[[CustomModule]]
+name = "CustomNotifications"
+type = "Button"
+icon = "󰂚"
+command = "swaync-client -t -sw"
+listen_cmd = "~/.config/ashell/notifications.sh"
+icons.'dnd.*' = "󰂛"
+alert = ".*notification"
 
 [window_title]
 mode = "Title"

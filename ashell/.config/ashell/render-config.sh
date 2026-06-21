@@ -4,8 +4,8 @@ set -euo pipefail
 base_config="${ASHELL_BASE_CONFIG:-$HOME/.config/ashell/config.toml}"
 runtime_config="${ASHELL_RUNTIME_CONFIG:-${XDG_CACHE_HOME:-$HOME/.cache}/ashell/config.toml}"
 pidfile="${RECORDING_PIDFILE:-/tmp/gpu-screen-recorder.pid}"
-idle_modules='right = [["MediaPlayer", "Tray", "SystemInfo", "Tempo", "Privacy", "Settings"]]'
-recording_modules='right = [["MediaPlayer", "Tray", "Recording", "SystemInfo", "Tempo", "Privacy", "Settings"]]'
+idle_modules='right = [["MediaPlayer", "Tray", "SystemInfo", "Tempo", "Privacy", "CustomNotifications", "Settings"]]'
+recording_modules='right = [["MediaPlayer", "Tray", "Recording", "SystemInfo", "Tempo", "Privacy", "CustomNotifications", "Settings"]]'
 
 is_recording() {
     [[ -f "$pidfile" ]] && kill -0 "$(cat "$pidfile")" 2>/dev/null
