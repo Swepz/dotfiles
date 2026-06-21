@@ -96,6 +96,26 @@ vim.g.have_nerd_font = true
 local default_colorscheme = "tokyonight-moon"
 local colorscheme_state_file = vim.fn.stdpath("state") .. "/colorscheme"
 
+-- Transparent editor background so the terminal's opacity shows through.
+local transparent_groups = {
+	"Normal",
+	"NormalNC",
+	"SignColumn",
+	"EndOfBuffer",
+	"LineNr",
+	"CursorLineNr",
+	"FoldColumn",
+	"MsgArea",
+}
+vim.api.nvim_create_autocmd("ColorScheme", {
+	desc = "Transparent background (let terminal opacity show through)",
+	callback = function()
+		for _, group in ipairs(transparent_groups) do
+			vim.cmd(string.format("highlight %s guibg=NONE ctermbg=NONE", group))
+		end
+	end,
+})
+
 local function read_colorscheme()
 	local ok, lines = pcall(vim.fn.readfile, colorscheme_state_file)
 	if ok and lines[1] and vim.trim(lines[1]) ~= "" then
@@ -922,6 +942,7 @@ require("lazy").setup({
 		priority = 1000,
 		config = function()
 			require("tokyonight").setup({
+				transparent = true,
 				styles = {
 					comments = { italic = false },
 				},
