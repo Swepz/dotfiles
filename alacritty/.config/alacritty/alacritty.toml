@@ -6,7 +6,7 @@ family = "FiraCode"
 style = "Regular"
 
 [window]
-opacity = 0.90
+opacity = 0.80
 
 [window.padding]
 x = 5
