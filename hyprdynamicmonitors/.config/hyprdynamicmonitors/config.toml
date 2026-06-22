@@ -22,8 +22,10 @@ debounce_time_ms = 1500
 # Toast on profile changes so we see what HDM decided (optional, comment out if noisy)
 post_apply_exec = "notify-send -t 2000 'Display profile' \"$HYPRDYNAMICMONITORS_PROFILE\""
 
+# HDM's built-in update toast is redundant with the post_apply_exec notify-send
+# above (which also shows the profile name). Keep only one to avoid double toasts.
 [notifications]
-disabled = false
+disabled = true
 timeout_ms = 3000
 
 [lid_events]
