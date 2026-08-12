@@ -17,9 +17,10 @@ stow_packages:
   - mime
   - nvim
   - rofi
+  - starship
+  - swaync
   - waybar
   - waypaper
-  - waytrogen
   - zathura
   - zed
 
@@ -69,6 +70,7 @@ shell_packages:
 
 editor_packages:
   - neovim
+  - tree-sitter-cli
   - vim
   - zed
   - nano
@@ -193,6 +195,7 @@ aur_packages:
   - hyprshutdown
   - pacseek
   - python-pywalfox
+  - python-screeninfo  # Waypaper dependency; rebuild after Python ABI upgrades
   - sddm-sugar-candy-git
   - visual-studio-code-insiders-bin
   - waypaper

@@ -234,7 +234,7 @@ test_walk_mode_service_uses_systemd_inhibit() {
 }
 
 test_recording_module_is_not_in_base_topbar() {
-    assert_file_contains "$ROOT_DIR/ashell/.config/ashell/config.toml" 'right = [["MediaPlayer", "Tray", "SystemInfo", "Tempo", "Privacy", "Settings"]]'
+    assert_file_contains "$ROOT_DIR/ashell/.config/ashell/config.toml" 'right = [["MediaPlayer", "Tray", "SystemInfo", "Tempo", "Privacy", "CustomNotifications", "Settings"]]'
     assert_file_contains "$ROOT_DIR/ashell/.config/ashell/config.toml" 'name = "Recording"'
 }
 
@@ -248,8 +248,8 @@ test_recording_runtime_config_excludes_recording_when_idle() {
     RECORDING_PIDFILE="$recording_pidfile" \
         "$ROOT_DIR/ashell/.config/ashell/render-config.sh"
 
-    assert_file_contains "$runtime_config" 'right = [["MediaPlayer", "Tray", "SystemInfo", "Tempo", "Privacy", "Settings"]]'
-    assert_file_not_contains "$runtime_config" 'right = [["MediaPlayer", "Tray", "Recording", "SystemInfo", "Tempo", "Privacy", "Settings"]]'
+    assert_file_contains "$runtime_config" 'right = [["MediaPlayer", "Tray", "SystemInfo", "Tempo", "Privacy", "CustomNotifications", "Settings"]]'
+    assert_file_not_contains "$runtime_config" 'right = [["MediaPlayer", "Tray", "Recording", "SystemInfo", "Tempo", "Privacy", "CustomNotifications", "Settings"]]'
 }
 
 test_recording_runtime_config_includes_recording_when_active() {
@@ -267,7 +267,7 @@ test_recording_runtime_config_includes_recording_when_active() {
     RECORDING_PIDFILE="$recording_pidfile" \
         "$ROOT_DIR/ashell/.config/ashell/render-config.sh"
 
-    assert_file_contains "$runtime_config" 'right = [["MediaPlayer", "Tray", "Recording", "SystemInfo", "Tempo", "Privacy", "Settings"]]'
+    assert_file_contains "$runtime_config" 'right = [["MediaPlayer", "Tray", "Recording", "SystemInfo", "Tempo", "Privacy", "CustomNotifications", "Settings"]]'
     kill "$fake_recorder_pid" 2>/dev/null || true
     trap - RETURN
 }
@@ -275,6 +275,11 @@ test_recording_runtime_config_includes_recording_when_active() {
 test_recording_toggle_refreshes_ashell_runtime_config() {
     assert_file_contains "$ROOT_DIR/hypr/.config/hypr/scripts/toggle-record.sh" 'ASHELL_CONFIG_RENDER="${ASHELL_CONFIG_RENDER:-$HOME/.config/ashell/render-config.sh}"'
     assert_file_contains "$ROOT_DIR/hypr/.config/hypr/scripts/toggle-record.sh" '"$ASHELL_CONFIG_RENDER" 2>/dev/null || true'
+}
+
+test_ashell_launch_uses_working_renderer() {
+    assert_file_contains "$ROOT_DIR/ashell/.config/ashell/launch.sh" 'export WGPU_BACKEND="${WGPU_BACKEND:-gl}"'
+    assert_file_contains "$ROOT_DIR/ashell/.config/ashell/launch.sh" 'hyprctl dispatch exec "env WGPU_BACKEND=$WGPU_BACKEND ashell --config-path $CONFIG_PATH"'
 }
 
 test_resume_launches_when_monitor_is_ready
@@ -288,5 +293,6 @@ test_recording_module_is_not_in_base_topbar
 test_recording_runtime_config_excludes_recording_when_idle
 test_recording_runtime_config_includes_recording_when_active
 test_recording_toggle_refreshes_ashell_runtime_config
+test_ashell_launch_uses_working_renderer
 
 printf 'ok - ashell sleep hooks\n'
