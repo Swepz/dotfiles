@@ -24,6 +24,7 @@ stow_packages:
 
 retired_packages:
   - waybar
+  - socat
   - linux
   - linux-headers
   - wlogout
