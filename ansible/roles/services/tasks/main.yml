@@ -22,6 +22,7 @@
   ignore_errors: true
 
 - name: Configure lid-close handling
+  tags: [lid_switch]
   become: true
   ansible.builtin.copy:
     dest: /etc/systemd/logind.conf.d/90-dotfiles-lid-switch.conf
@@ -36,6 +37,7 @@
   register: lid_switch_config
 
 - name: Remove obsolete lid-close overrides
+  tags: [lid_switch]
   become: true
   ansible.builtin.file:
     path: "{{ item }}"
@@ -46,6 +48,7 @@
   register: obsolete_lid_switch_configs
 
 - name: Reload logind after lid-close change
+  tags: [lid_switch]
   become: true
   ansible.builtin.systemd:
     name: systemd-logind
