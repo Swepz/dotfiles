@@ -1,0 +1,35 @@
+{{- $laptop := index .MonitorsByTag "laptop" -}}
+{{- $external := index .MonitorsByTag "external" -}}
+local laptop = "{{ $laptop.Name }}"
+local external = "{{ $external.Name }}"
+local lid_closed = {{ isLidClosed }}
+
+{{- if isLidClosed }}
+hl.monitor({ output = laptop, disabled = true })
+{{- else }}
+hl.monitor({ output = laptop, mode = "3200x2000@120", position = "0x0", scale = 1.60 })
+{{- end }}
+{{- if eq $external.Description "HP Inc. HP P34hc G4 CNC51919TC" }}
+hl.monitor({ output = external, mode = "3440x1440@60", position = "2000x0", scale = 1 })
+{{- else if eq $external.Description "Dell Inc. DELL U2721DE 10GFD23" }}
+hl.monitor({ output = external, mode = "2560x1440@59.95", position = "2000x0", scale = 1 })
+{{- else }}
+hl.monitor({ output = external, mode = "preferred", position = "2000x0", scale = 1 })
+{{- end }}
+
+hl.monitor({ output = "", mode = "preferred", position = "auto", scale = 1 })
+
+for workspace = 1, 10 do
+    local monitor = external
+    local default = workspace == 1
+    if not lid_closed then
+        monitor = workspace <= 5 and laptop or external
+        default = workspace == 1 or workspace == 6
+    end
+    hl.workspace_rule({
+        workspace = tostring(workspace),
+        monitor = monitor,
+        default = default,
+        persistent = true,
+    })
+end

@@ -40,8 +40,8 @@ write_hyprctl_stub() {
 set -euo pipefail
 
 case "$*" in
-    "dispatch dpms on")
-        printf 'hyprctl dispatch dpms on\n' >>"$CALL_LOG"
+    "dispatch hl.dsp.dpms({ action = \"enable\" })")
+        printf 'display power enable\n' >>"$CALL_LOG"
         ;;
     "monitors -j")
         cat "$MONITORS_JSON"
@@ -133,7 +133,7 @@ JSON
 
     "$ROOT_DIR/ashell/.config/ashell/resume.sh"
 
-    assert_file_contains "$CALL_LOG" "hyprctl dispatch dpms on"
+    assert_file_contains "$CALL_LOG" "display power enable"
     assert_file_contains "$CALL_LOG" "launch"
 }
 
@@ -155,7 +155,7 @@ STUB
 
     "$ROOT_DIR/ashell/.config/ashell/resume.sh"
 
-    assert_file_contains "$CALL_LOG" "hyprctl dispatch dpms on"
+    assert_file_contains "$CALL_LOG" "display power enable"
     assert_file_contains "$CALL_LOG" "launch"
 }
 

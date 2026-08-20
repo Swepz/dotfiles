@@ -17,13 +17,13 @@ stow_packages:
   - mime
   - nvim
   - rofi
-  - waybar
   - waypaper
   - waytrogen
   - zathura
   - zed
 
 retired_packages:
+  - waybar
   - linux
   - linux-headers
   - wlogout
@@ -89,7 +89,6 @@ desktop_packages:
   - hyprutils
   - hyprwayland-scanner
   - hyprland-qt-support
-  - waybar
   - rofi
   - dunst
   - swaync
@@ -116,7 +115,7 @@ desktop_packages:
   - ttf-firacode-nerd
   - ttf-material-icons
   - papirus-icon-theme
-  - socat  # used by ~/.config/hypr/scripts/waybar-watcher.sh to listen on Hyprland socket2
+  - socat
 
 devtools_packages:
   - docker

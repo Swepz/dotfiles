@@ -21,3 +21,12 @@
   become: false
   register: stow_result
   changed_when: "'LINK: ' in stow_result.stderr"
+
+- name: Seed monitor configuration
+  ansible.builtin.copy:
+    src: "{{ dotfiles_dest }}/hyprdynamicmonitors/.config/hyprdynamicmonitors/hyprconfigs/fallback.lua"
+    dest: "{{ ansible_facts.env.HOME }}/.config/hypr/monitors.lua"
+    remote_src: true
+    force: false
+    mode: "0644"
+  become: false

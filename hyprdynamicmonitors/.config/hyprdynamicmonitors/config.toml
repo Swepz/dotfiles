@@ -15,8 +15,7 @@
 #   anything unexpected  -> fallback         (enable whatever is present)
 
 [general]
-# Where HDM writes the generated monitor config. Sourced from hyprland.conf.
-destination = "$HOME/.config/hypr/monitors.conf"
+destination = "$HOME/.config/hypr/monitors.lua"
 # Collect a burst of events, apply once. 1500ms is the upstream default.
 debounce_time_ms = 1500
 # Toast on profile changes so we see what HDM decided (optional, comment out if noisy)
@@ -66,7 +65,7 @@ lid_state_match = 2
 
 # --- Fallback when no profile matches (e.g. a new unknown monitor) ---
 [fallback_profile]
-config_file = "hyprconfigs/fallback.conf"
+config_file = "hyprconfigs/fallback.lua"
 config_file_type = "template"
 
 # ============================================================
@@ -78,7 +77,7 @@ config_file_type = "template"
 # Known monitors (HP P34hc, Dell U2721DE) get tuned resolution/position.
 # Unknown monitors get preferred,auto-right,1 — zero config needed.
 [profiles.docked]
-config_file = "hyprconfigs/docked.go.tmpl"
+config_file = "hyprconfigs/docked.lua.tmpl"
 config_file_type = "template"
 
 [[profiles.docked.conditions.required_monitors]]
@@ -93,7 +92,7 @@ monitor_tag = "external"
 # Laptop solo + lid open: normal mobile use
 # Score: 1 desc match (5) + lid bonus (2) = 7
 [profiles.laptop_lid_open]
-config_file = "hyprconfigs/laptop-only.conf"
+config_file = "hyprconfigs/laptop-only.lua"
 config_file_type = "template"
 
 [profiles.laptop_lid_open.conditions]
@@ -108,7 +107,7 @@ monitor_tag = "laptop"
 # otherwise it locks the session instead of entering the broken s2idle path.
 # Score: 1 desc match (5) + lid bonus (2) = 7
 [profiles.lid_closed_solo]
-config_file = "hyprconfigs/lid-closed-solo.conf"
+config_file = "hyprconfigs/lid-closed-solo.lua"
 config_file_type = "template"
 post_apply_exec = "/home/swepz/.config/hypr/scripts/clamshell-close.sh"
 

@@ -25,7 +25,7 @@ launch_ashell() {
     "$LAUNCH"
 }
 
-"$HYPRCTL" dispatch dpms on >>"$LOG_FILE" 2>&1 || log "hyprctl dpms on failed"
+"$HYPRCTL" dispatch 'hl.dsp.dpms({ action = "enable" })' >>"$LOG_FILE" 2>&1
 
 if monitor_ready; then
     launch_ashell

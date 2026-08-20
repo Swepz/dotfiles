@@ -10,7 +10,6 @@
 # - First invocation: pick a region with slurp, start recording to ~/Videos/rec-<ts>.mp4
 # - Second invocation (while recording): SIGINT gpu-screen-recorder to flush the file cleanly
 # - flock prevents a double-press race
-# - Refreshes bar indicators so recording controls only appear while active
 
 set -u
 
@@ -19,7 +18,6 @@ PIDFILE=/tmp/gpu-screen-recorder.pid
 LOGFILE=/tmp/gpu-screen-recorder.log
 STATEFILE=/tmp/gpu-screen-recorder.status
 OUTDIR="$HOME/Videos"
-WAYBAR_SIGNAL=8
 ASHELL_CONFIG_RENDER="${ASHELL_CONFIG_RENDER:-$HOME/.config/ashell/render-config.sh}"
 
 mkdir -p "$OUTDIR"
@@ -31,7 +29,6 @@ flock -n 9 || exit 0
 refresh_recording_indicators() {
     "$ASHELL_CONFIG_RENDER" 2>/dev/null || true
     printf '%s\n' "$(date +%s)" >>"$STATEFILE" 2>/dev/null || true
-    pkill -RTMIN+${WAYBAR_SIGNAL} waybar 2>/dev/null || true
 }
 
 is_recording() {
