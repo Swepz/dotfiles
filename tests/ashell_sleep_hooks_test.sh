@@ -62,6 +62,9 @@ test_logind_handles_clamshell_policy() {
     assert_file_contains "$services_file" 'HandleLidSwitch=suspend'
     assert_file_contains "$services_file" 'HandleLidSwitchExternalPower=suspend'
     assert_file_contains "$services_file" 'HandleLidSwitchDocked=ignore'
+    assert_file_contains "$services_file" '/etc/systemd/logind.conf.d/10-hyprland-clamshell.conf'
+    assert_file_contains "$services_file" '/etc/systemd/logind.conf.d/lid-switch.conf'
+    assert_file_contains "$services_file" 'state: reloaded'
     assert_file_not_contains "$monitors_file" 'clamshell-close.sh'
 }
 

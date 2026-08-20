@@ -33,6 +33,24 @@
       HandleLidSwitch=suspend
       HandleLidSwitchExternalPower=suspend
       HandleLidSwitchDocked=ignore
+  register: lid_switch_config
+
+- name: Remove obsolete lid-close overrides
+  become: true
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: absent
+  loop:
+    - /etc/systemd/logind.conf.d/10-hyprland-clamshell.conf
+    - /etc/systemd/logind.conf.d/lid-switch.conf
+  register: obsolete_lid_switch_configs
+
+- name: Reload logind after lid-close change
+  become: true
+  ansible.builtin.systemd:
+    name: systemd-logind
+    state: reloaded
+  when: lid_switch_config.changed or obsolete_lid_switch_configs.changed
 
 - name: Ensure systemd sleep drop-in directory exists
   become: true
