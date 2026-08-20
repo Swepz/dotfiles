@@ -115,7 +115,6 @@ desktop_packages:
   - ttf-firacode-nerd
   - ttf-material-icons
   - papirus-icon-theme
-  - socat
 
 devtools_packages:
   - docker

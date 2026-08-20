@@ -21,7 +21,7 @@
   loop: "{{ enabled_services }}"
   ignore_errors: true
 
-- name: Keep logind out of lid-close handling
+- name: Configure lid-close handling
   become: true
   ansible.builtin.copy:
     dest: /etc/systemd/logind.conf.d/90-dotfiles-lid-switch.conf
@@ -30,8 +30,8 @@
     mode: "0644"
     content: |
       [Login]
-      HandleLidSwitch=ignore
-      HandleLidSwitchExternalPower=ignore
+      HandleLidSwitch=suspend
+      HandleLidSwitchExternalPower=suspend
       HandleLidSwitchDocked=ignore
 
 - name: Ensure systemd sleep drop-in directory exists

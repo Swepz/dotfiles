@@ -109,7 +109,6 @@ monitor_tag = "laptop"
 [profiles.lid_closed_solo]
 config_file = "hyprconfigs/lid-closed-solo.lua"
 config_file_type = "template"
-post_apply_exec = "/home/swepz/.config/hypr/scripts/clamshell-close.sh"
 
 [profiles.lid_closed_solo.conditions]
 lid_state = "Closed"

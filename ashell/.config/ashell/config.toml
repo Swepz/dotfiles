@@ -15,9 +15,8 @@ update_cmd = 'alacritty -e bash -c "yay; echo Done - Press enter to exit; read" 
 interval = 3600
 
 [workspaces]
-visibility_mode = "All"
-group_by_monitor = false
-enable_workspace_filling = true
+visibility_mode = "MonitorSpecific"
+enable_workspace_filling = false
 
 [[CustomModule]]
 name = "appLauncher"
