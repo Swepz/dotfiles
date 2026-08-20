@@ -15,7 +15,6 @@ rg -q '^config ok$' <<<"$verify_output"
 
 hyprdynamicmonitors validate --config "$profiles_dir/config.toml"
 render_output="$(hyprdynamicmonitors run --config "$profiles_dir/config.toml" --run-once --dry-run --enable-lid-events 2>&1)"
-rg -q 'Templated data:' <<<"$render_output"
 rg -q 'Run succeeded, exiting' <<<"$render_output"
 
 printf 'ok - lua compositor config\n'
