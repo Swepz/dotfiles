@@ -54,3 +54,21 @@
   register: aur_result
   changed_when: "'there is nothing to do' not in aur_result.stdout"
   ignore_errors: true
+
+- name: Check Waypaper's screeninfo module for the current Python ABI
+  become: true
+  become_user: aur_builder
+  ansible.builtin.command:
+    cmd: /usr/bin/python -c "import screeninfo"
+  register: screeninfo_import
+  changed_when: false
+  failed_when: false
+
+- name: Rebuild screeninfo after a Python ABI upgrade
+  become: true
+  become_user: aur_builder
+  ansible.builtin.command:
+    cmd: yay -S --noconfirm --rebuild python-screeninfo
+  when: screeninfo_import.rc != 0
+  register: screeninfo_rebuild
+  changed_when: screeninfo_rebuild.rc == 0

@@ -109,7 +109,7 @@ hl.gesture({
 local autostart = {
     "hyprctl setcursor breeze_cursors 24",
     "/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1",
-    "gnome-keyring-daemon --start --components=secrets,ssh",
+    "systemctl --user start gnome-keyring-daemon.service",
     scripts .. "/wallpaper-restore.sh",
     "swaync",
     home .. "/.config/ashell/launch.sh",

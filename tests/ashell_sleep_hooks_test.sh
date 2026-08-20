@@ -128,6 +128,11 @@ test_recording_toggle_refreshes_ashell_runtime_config() {
     assert_file_contains "$ROOT_DIR/hypr/.config/hypr/scripts/toggle-record.sh" '"$ASHELL_CONFIG_RENDER" 2>/dev/null || true'
 }
 
+test_ashell_launch_uses_working_renderer() {
+    assert_file_contains "$ROOT_DIR/ashell/.config/ashell/launch.sh" 'export WGPU_BACKEND="${WGPU_BACKEND:-gl}"'
+    assert_file_contains "$ROOT_DIR/ashell/.config/ashell/launch.sh" 'hyprctl dispatch "hl.dsp.exec_cmd([[env WGPU_BACKEND=$WGPU_BACKEND ashell --config-path $CONFIG_PATH]])"'
+}
+
 test_walk_mode_ashell_settings_button_is_wired
 test_walk_mode_service_uses_systemd_inhibit
 test_logind_handles_clamshell_policy
@@ -137,5 +142,6 @@ test_recording_module_is_not_in_base_topbar
 test_recording_runtime_config_excludes_recording_when_idle
 test_recording_runtime_config_includes_recording_when_active
 test_recording_toggle_refreshes_ashell_runtime_config
+test_ashell_launch_uses_working_renderer
 
 printf 'ok - ashell sleep hooks\n'
