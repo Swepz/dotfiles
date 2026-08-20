@@ -56,7 +56,7 @@
   "buffer_font_family": ".ZedMono",
   "vim_mode": true,
   "icon_theme": {
-    "mode": "light",
+    "mode": "system",
     "light": "Colored Zed Icons Theme Dark",
     "dark": "Colored Zed Icons Theme Dark",
   },
@@ -65,6 +65,6 @@
   "theme": {
     "mode": "dark",
     "light": "Catppuccin Latte",
-    "dark": "Shades Of Purple",
+    "dark": "Dracula Solid"
   },
 }
