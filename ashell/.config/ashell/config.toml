@@ -1,8 +1,10 @@
-log_level = "warn"
 #outputs = { Targets = ["eDP-1"] }
 position = "Top"
 # Force metric units (°C, km/h) + English date names; overrides en_US locale for the bar only
 region = "en_GB.UTF-8"
+
+[logging]
+level = "warn"
 
 [modules]
 left = [["appLauncher", "Updates", "Workspaces"]]
@@ -47,7 +49,7 @@ truncate_title_after_length = 60
 
 [media_player]
 indicator_format = "Icon"
-max_title_length = 60
+max_text_length = 60
 
 [system_info]
 indicators = ["Cpu", "Memory", "Temperature"]
@@ -109,7 +111,6 @@ status_command = "~/.config/ashell/walk-mode.sh status"
 
 [appearance]
 scale_factor = 1.25
-style = "Solid"
 opacity = 0.8
 
 primary_color = "#36f9f6"
@@ -117,6 +118,9 @@ success_color = "#72f1b8"
 text_color = "#f8f8f2"
 workspace_colors = ["#36f9f6", "#ff7edb"]
 special_workspace_colors = ["#c792ea", "#fede5d"]
+
+[appearance.bar]
+surface = "solid"
 
 [appearance.danger_color]
 base = "#fe4450"
@@ -127,5 +131,3 @@ base = "#262335"
 weak = "#2a2440"
 strong = "#463465"
 
-[appearance.secondary_color]
-base = "#1a1626"
