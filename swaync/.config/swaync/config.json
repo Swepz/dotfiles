@@ -24,6 +24,24 @@
   "hide-on-clear": false,
   "hide-on-action": true,
   "script-fail-notify": true,
+  "notification-visibility": {
+    "keep-critical": {
+      "state": "enabled",
+      "urgency": "Critical"
+    },
+    "keep-messages-and-mail-by-app-name": {
+      "state": "enabled",
+      "app-name": "(?i)vesktop|discord|signal|telegram|slack|element|whatsapp|evolution|thunderbird|geary|zen"
+    },
+    "keep-messages-and-mail-by-desktop-entry": {
+      "state": "enabled",
+      "desktop-entry": "(?i)vesktop|discord|signal|telegram|slack|element|whatsapp|evolution|thunderbird|geary|zen"
+    },
+    "popup-only-everything-else": {
+      "state": "transient",
+      "urgency": "Low|Normal"
+    }
+  },
   "widgets": [
     "title",
     "dnd",
