@@ -85,7 +85,7 @@ description = "Samsung Display Corp. ATNA60KA02-0"
 monitor_tag = "laptop"
 
 [[profiles.docked.conditions.required_monitors]]
-description = ".*"
+description = ".+"
 match_description_using_regex = true
 monitor_tag = "external"
 

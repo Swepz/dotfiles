@@ -17,6 +17,11 @@ hl.monitor({ output = external, mode = "2560x1440@59.95", position = "2000x0", s
 hl.monitor({ output = external, mode = "preferred", position = "2000x0", scale = 1 })
 {{- end }}
 
+{{- range .Monitors }}
+{{- if eq .Description "" }}
+hl.monitor({ output = "{{ .Name }}", disabled = true })
+{{- end }}
+{{- end }}
 hl.monitor({ output = "", mode = "preferred", position = "auto", scale = 1 })
 
 for workspace = 1, 10 do
