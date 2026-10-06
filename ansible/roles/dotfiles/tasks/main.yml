@@ -45,6 +45,8 @@
     force: false
     mode: "0644"
   loop:
+    - binds
+    - binds-user
     - colors
     - layout
   become: false
