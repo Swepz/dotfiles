@@ -19,3 +19,8 @@ save_to_clipboard = true
 
 [general]
 import = ["~/.config/alacritty/dank-theme.toml"]
+
+[[keyboard.bindings]]
+key = "Return"
+mods = "Shift"
+chars = "\u001B\r"
