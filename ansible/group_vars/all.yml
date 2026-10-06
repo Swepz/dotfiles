@@ -4,6 +4,7 @@ dotfiles_dest: "{{ ansible_facts.env.HOME }}/.dotfiles"
 
 stow_packages:
   - alacritty
+  - ccstatusline
   - fish
   - git
   - gtk
@@ -11,6 +12,7 @@ stow_packages:
   - hyprdynamicmonitors
   - mime
   - nvim
+  - wireplumber
   - zathura
   - zed
 
