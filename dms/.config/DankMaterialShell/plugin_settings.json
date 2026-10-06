@@ -1,0 +1,53 @@
+{
+  "dockerManager": {
+    "enabled": true
+  },
+  "dankActions": {
+    "enabled": true,
+    "variants": [
+      {
+        "id": "variant_walkmode",
+        "name": "Walk Mode",
+        "icon": "directions_walk",
+        "displayText": "",
+        "displayCommand": "$HOME/.config/hypr/scripts/walk-mode.sh status && echo On || echo Off",
+        "clickCommand": "$HOME/.config/hypr/scripts/walk-mode.sh toggle",
+        "middleClickCommand": "",
+        "rightClickCommand": "",
+        "updateInterval": 5,
+        "showIcon": true,
+        "showText": true,
+        "visibilityCommand": "",
+        "visibilityInterval": 0
+      },
+      {
+        "id": "variant_recording",
+        "name": "Recording",
+        "icon": "stop_circle",
+        "displayText": "REC",
+        "displayCommand": "",
+        "clickCommand": "$HOME/.config/hypr/scripts/toggle-record.sh",
+        "middleClickCommand": "",
+        "rightClickCommand": "",
+        "updateInterval": 0,
+        "showIcon": true,
+        "showText": true,
+        "visibilityCommand": "[ -s /tmp/gpu-screen-recorder.pid ] && kill -0 \"$(cat /tmp/gpu-screen-recorder.pid)\" 2>/dev/null",
+        "visibilityInterval": 2
+      }
+    ]
+  },
+  "calculator": {
+    "enabled": true,
+    "trigger": "="
+  },
+  "wallpaperCarousel": {
+    "enabled": true
+  },
+  "dankKDEConnect": {
+    "enabled": true
+  },
+  "quickCapture": {
+    "enabled": true
+  }
+}

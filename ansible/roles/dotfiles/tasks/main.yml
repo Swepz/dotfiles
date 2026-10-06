@@ -22,6 +22,11 @@
   register: stow_result
   changed_when: "'LINK: ' in stow_result.stderr"
 
+- name: Install DankMaterialShell plugins from the lockfile
+  ansible.builtin.command:
+    cmd: "dms plugins restore {{ ansible_facts.env.HOME }}/.config/DankMaterialShell/plugins.lock.json"
+  become: false
+
 - name: Seed monitor configuration
   ansible.builtin.copy:
     content: |

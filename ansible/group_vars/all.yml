@@ -5,6 +5,7 @@ dotfiles_dest: "{{ ansible_facts.env.HOME }}/.dotfiles"
 stow_packages:
   - alacritty
   - ccstatusline
+  - dms
   - fish
   - git
   - gtk
