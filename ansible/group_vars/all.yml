@@ -21,6 +21,10 @@ retired_packages:
   - wine-staging
   - wine-mono
   - hyprwhspr
+  - xdg-desktop-portal-gnome
+  - zathura-pdf-mupdf
+  - bibata-cursor-theme-bin
+  - rustdesk
   - waybar
   - linux
   - linux-headers
