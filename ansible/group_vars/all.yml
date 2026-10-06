@@ -57,7 +57,6 @@ retired_packages:
   - antigravity
   - antigravity-ide
   - visual-studio-code-insiders-bin
-  - grub
   - lvm2
   - iwd
   - wireless_tools
