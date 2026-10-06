@@ -227,6 +227,7 @@ enabled_services:
   - nvidia-hibernate
   - nvidia-resume
   - fstrim.timer
+  - mullvad-daemon
 
 tmux_repo: "https://github.com/gpakosz/.tmux.git"
 tmux_dest: "{{ ansible_facts.env.HOME }}/.tmux"
