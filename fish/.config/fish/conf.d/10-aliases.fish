@@ -40,4 +40,11 @@ alias gcheck="git checkout"
 alias gcredential="git config credential.helper store"
 
 # Claude
-alias claude="claude --dangerously-skip-permissions"
+
+function codex
+    if contains -- --yolo $argv
+        command codex --dangerously-bypass-hook-trust $argv
+    else
+        command codex $argv
+    end
+end
