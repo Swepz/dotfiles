@@ -28,6 +28,16 @@
     scope: user
   loop: "{{ enabled_user_services }}"
 
+- name: Ensure systemd logind drop-in directory exists
+  tags: [lid_switch]
+  become: true
+  ansible.builtin.file:
+    path: /etc/systemd/logind.conf.d
+    state: directory
+    owner: root
+    group: root
+    mode: "0755"
+
 - name: Configure lid-close handling
   tags: [lid_switch]
   become: true
