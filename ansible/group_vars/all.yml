@@ -18,6 +18,9 @@ stow_packages:
 
 retired_packages:
   - ml4w-hyprland
+  - wine-staging
+  - wine-mono
+  - hyprwhspr
   - waybar
   - linux
   - linux-headers
@@ -123,7 +126,6 @@ desktop_packages:
   - hyprland
   - hyprland-qt-support
   - dms-shell
-  - dms-shell-hyprland
   - kimageformats
   - cava
   - gpu-screen-recorder
