@@ -23,7 +23,6 @@ alias wifi='nmtui'
 # Window Managers
 # -----------------------------------------------------
 
-alias Qtile='startx'
 # Hyprland with Hyprland
 
 # -----------------------------------------------------
@@ -39,18 +38,6 @@ alias gsp="git stash; git pull"
 alias gfo="git fetch origin"
 alias gcheck="git checkout"
 alias gcredential="git config credential.helper store"
-
-# -----------------------------------------------------
-# System
-# -----------------------------------------------------
-alias update-grub='sudo grub-mkconfig -o /boot/grub/grub.cfg'
-
-# -----------------------------------------------------
-# Qtile
-# -----------------------------------------------------
-alias res1='xrandr --output DisplayPort-0 --mode 2560x1440 --rate 120'
-alias res2='xrandr --output DisplayPort-0 --mode 1920x1080 --rate 120'
-alias setkb='setxkbmap de;echo "Keyboard set back to de."'
 
 # Claude
 alias claude="claude --dangerously-skip-permissions"

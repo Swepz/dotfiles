@@ -16,7 +16,7 @@
 
 - name: Stow dotfile packages
   ansible.builtin.command:
-    cmd: "stow --dir={{ dotfiles_dest }} --target={{ ansible_facts.env.HOME }} --verbose=2 --adopt -R {{ item }}"
+    cmd: "stow --dir={{ dotfiles_dest }} --target={{ ansible_facts.env.HOME }} --verbose=2 -R {{ item }}"
   loop: "{{ stow_packages }}"
   become: false
   register: stow_result
@@ -24,9 +24,27 @@
 
 - name: Seed monitor configuration
   ansible.builtin.copy:
-    src: "{{ dotfiles_dest }}/hyprdynamicmonitors/.config/hyprdynamicmonitors/hyprconfigs/fallback.lua"
+    content: |
+      hl.monitor({ output = "", mode = "preferred", position = "auto", scale = 1 })
     dest: "{{ ansible_facts.env.HOME }}/.config/hypr/monitors.lua"
-    remote_src: true
     force: false
     mode: "0644"
+  become: false
+
+- name: Ensure DankMaterialShell Hyprland include directory exists
+  ansible.builtin.file:
+    path: "{{ ansible_facts.env.HOME }}/.config/hypr/dms"
+    state: directory
+    mode: "0755"
+  become: false
+
+- name: Seed DankMaterialShell Hyprland includes
+  ansible.builtin.copy:
+    content: ""
+    dest: "{{ ansible_facts.env.HOME }}/.config/hypr/dms/{{ item }}.lua"
+    force: false
+    mode: "0644"
+  loop:
+    - colors
+    - layout
   become: false

@@ -17,38 +17,5 @@ save_to_clipboard = true
 
 [cursor]
 
-# Synthwave '84
-[colors]
-draw_bold_text_with_bright_colors = true
-
-[colors.primary]
-background = '#262335'
-foreground = '#f8f8f2'
-
-[colors.cursor]
-text = '#262335'
-cursor = '#36f9f6'
-
-[colors.selection]
-background = '#463465'
-text = '#f8f8f2'
-
-[colors.normal]
-black = '#34294f'
-red = '#fe4450'
-green = '#72f1b8'
-yellow = '#fede5d'
-blue = '#03edf9'
-magenta = '#c792ea'
-cyan = '#36f9f6'
-white = '#f8f8f2'
-
-[colors.bright]
-black = '#848bbd'
-red = '#ff8b39'
-green = '#88fcd0'
-yellow = '#fff951'
-blue = '#36f9f6'
-magenta = '#ff7edb'
-cyan = '#36f9f6'
-white = '#ffffff'
+[general]
+import = ["~/.config/alacritty/dank-theme.toml"]

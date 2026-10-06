@@ -4,32 +4,75 @@ dotfiles_dest: "{{ ansible_facts.env.HOME }}/.dotfiles"
 
 stow_packages:
   - alacritty
-  - ashell
-  - dunst
   - fish
-  - gh
   - git
   - gtk
-  - htop
   - hypr
   - hyprdynamicmonitors
-  - kitty
   - mime
   - nvim
-  - rofi
-  - starship
-  - swaync
-  - waypaper
   - zathura
   - zed
 
 retired_packages:
   - waybar
-  - socat
   - linux
   - linux-headers
   - wlogout
   - wlogout-debug
+  - ashell
+  - ashell-debug
+  - swaync
+  - dunst
+  - cliphist
+  - polkit-gnome
+  - hypridle
+  - hyprlock
+  - hyprpaper
+  - rofi
+  - nwg-dock-hyprland
+  - network-manager-applet
+  - grimblast-git
+  - python-pywalfox
+  - python-screeninfo
+  - waypaper
+  - waytrogen
+  - claude-desktop
+  - socat
+  - plasma-desktop
+  - plasma-workspace
+  - plasma-login-manager
+  - powerdevil
+  - xdg-desktop-portal-kde
+  - konsole
+  - kitty
+  - ghostty
+  - firefox
+  - kate
+  - dolphin
+  - evince
+  - vlc
+  - antigravity
+  - antigravity-ide
+  - visual-studio-code-insiders-bin
+  - grub
+  - lvm2
+  - iwd
+  - wireless_tools
+  - z
+  - gum
+  - figlet
+  - vim
+  - hyprpicker
+  - qt6ct
+  - otf-font-awesome
+  - woff2-font-awesome
+  - vulkan-radeon
+  - vulkan-nouveau
+  - libva-intel-driver
+  - xf86-video-amdgpu
+  - xf86-video-ati
+  - xf86-video-nouveau
 
 base_packages:
   - base
@@ -51,8 +94,6 @@ base_packages:
   - linux-lts
   - linux-firmware
   - linux-lts-headers
-  - lvm2
-  - grub
   - intel-ucode
 
 shell_packages:
@@ -61,10 +102,7 @@ shell_packages:
   - zoxide
   - fzf
   - eza
-  - z
-  - gum
   - calc
-  - figlet
   - tldr
   - cloc
   - htop
@@ -72,52 +110,39 @@ shell_packages:
 editor_packages:
   - neovim
   - tree-sitter-cli
-  - vim
   - zed
   - nano
 
 terminal_packages:
-  - kitty
   - alacritty
   - tmux
 
 desktop_packages:
   - hyprland
-  - hyprpaper
-  - hypridle
-  - hyprlock
-  - hyprpicker
-  - hyprcursor
-  - hyprlang
-  - hyprutils
-  - hyprwayland-scanner
   - hyprland-qt-support
-  - rofi
-  - dunst
-  - swaync
-  - cliphist
+  - dms-shell
+  - dms-shell-hyprland
+  - kimageformats
+  - cava
   - gpu-screen-recorder
-  - nwg-dock-hyprland
   - xdg-desktop-portal-hyprland
-  - xdg-desktop-portal-gnome
+  - xdg-desktop-portal-gtk
   - xdg-utils
-  - polkit-gnome
   - brightnessctl
   - imagemagick
   - matugen
   - playerctl
   - pavucontrol
   - blueman
-  - network-manager-applet
   - qt5-wayland
-  - qt6ct
-  - otf-font-awesome
-  - woff2-font-awesome
   - ttf-fira-code
   - ttf-fira-sans
   - ttf-firacode-nerd
   - ttf-material-icons
   - papirus-icon-theme
+  - i2c-tools
+  - ddcutil
+  - noto-fonts-emoji
 
 devtools_packages:
   - docker
@@ -126,7 +151,6 @@ devtools_packages:
   - nvidia-container-toolkit
   - github-cli
   - npm
-  - python-jinja
   - cppcheck
   - pandoc-cli
   # Languages & toolchains
@@ -141,7 +165,7 @@ devtools_packages:
   - uv
   - lazygit
   - zathura
-  - zathura-pdf-mupdf
+  - zathura-pdf-poppler
 
 gpu_packages:
   - nvidia-open-dkms
@@ -150,56 +174,48 @@ gpu_packages:
   - lib32-nvidia-utils
   - egl-wayland
   - vulkan-intel
-  - vulkan-nouveau
-  - vulkan-radeon
   - intel-media-driver
-  - libva-intel-driver
-  - xf86-video-amdgpu
-  - xf86-video-ati
-  - xf86-video-nouveau
 
 app_packages:
-  - firefox
-  - chromium
   - signal-desktop
   - qbittorrent
   - krita
   - gwenview
-  - kate
   - nautilus
-  - dolphin
   - ark
   - gparted
   - filelight
-  - wine-staging
+  - wine
   - distrobox
   - gnome-calendar
   - gnome-keyring
+  - okular
+  - mpv
+  - mullvad-vpn
 
 network_packages:
   - networkmanager
-  - wireless_tools
-  - iwd
   - arp-scan
   - zerotier-one
   - power-profiles-daemon
 
 aur_packages:
-  - antigravity
-  - ashell
   - bibata-cursor-theme
   - etcher-bin
-  - grimblast-git
   - hyprdynamicmonitors-bin  # monitor/lid/power aware profile manager for Hyprland (clamshell mode)
   - hyprshutdown
   - pacseek
-  - python-pywalfox
-  - python-screeninfo  # Waypaper dependency; rebuild after Python ABI upgrades
   - sddm-sugar-candy-git
-  - visual-studio-code-insiders-bin
-  - waypaper
-  - waytrogen
   - zen-browser-bin
+  - google-chrome
+  - visual-studio-code-bin
+  - vesktop-bin
+  - rustdesk-bin
+  - hyprwhspr-git
+
+enabled_user_services:
+  - dms.service
+  - hyprwhspr.service
 
 enabled_services:
   - NetworkManager

@@ -2,23 +2,11 @@ local home = assert(os.getenv("HOME"), "HOME is not set")
 local scripts = home .. "/.config/hypr/scripts"
 
 for name, value in pairs({
-    SDL_VIDEODRIVER = "wayland",
-    EGL_PLATFORM = "wayland",
     GDK_DISABLE = "vulkan",
-    XDG_CURRENT_DESKTOP = "Hyprland",
-    XDG_SESSION_TYPE = "wayland",
-    XDG_SESSION_DESKTOP = "Hyprland",
-    QT_QPA_PLATFORM = "wayland;xcb",
-    QT_QPA_PLATFORMTHEME = "qt5ct",
+    QT_QPA_PLATFORMTHEME = "gtk3",
     QT_WAYLAND_DISABLE_WINDOWDECORATION = "1",
-    QT_AUTO_SCREEN_SCALE_FACTOR = "1",
-    GDK_SCALE = "1",
-    GDK_BACKEND = "wayland,x11,*",
-    CLUTTER_BACKEND = "wayland",
-    MOZ_ENABLE_WAYLAND = "1",
     XCURSOR_SIZE = "24",
     HYPRCURSOR_SIZE = "24",
-    OZONE_PLATFORM = "wayland",
     ELECTRON_OZONE_PLATFORM_HINT = "wayland",
 }) do
     hl.env(name, value)
@@ -47,10 +35,6 @@ hl.config({
         gaps_in = 0,
         gaps_out = 0,
         border_size = 1,
-        col = {
-            active_border = "rgba(36f9f6ff)",
-            inactive_border = "rgba(6d77b3ff)",
-        },
         layout = "master",
         resize_on_border = true,
     },
@@ -74,9 +58,6 @@ hl.config({
             render_power = 3,
             color = "rgba(1a1a1aee)",
         },
-    },
-    dwindle = {
-        preserve_split = true,
     },
     master = {
         new_status = "slave",
@@ -107,24 +88,16 @@ hl.gesture({
 })
 
 local autostart = {
-    "hyprctl setcursor breeze_cursors 24",
-    "/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1",
+    "hyprctl setcursor Bibata-Modern-Classic 24",
     "systemctl --user start gnome-keyring-daemon.service",
-    scripts .. "/wallpaper-restore.sh",
-    "swaync",
-    home .. "/.config/ashell/launch.sh",
     "sh -c 'exec hyprdynamicmonitors run --enable-lid-events >>\"$HOME/.cache/hyprdynamicmonitors.log\" 2>&1'",
     scripts .. "/gtk.sh",
-    "hypridle",
-    "wl-paste --watch cliphist store",
     "mullvad-vpn",
-    scripts .. "/cleanup.sh",
     "zen-browser",
     "zeditor",
     "rustdesk",
     "vesktop",
-    "dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP",
-    "systemctl --user start hyprland-session.target",
+    "sh -c 'dbus-update-activation-environment --systemd --all && systemctl --user start hyprland-session.target'",
 }
 
 hl.on("hyprland.start", function()
@@ -140,8 +113,6 @@ end
 exec("SUPER + RETURN", "alacritty")
 exec("SUPER + W", "zen-browser")
 exec("SUPER + E", "nautilus")
-exec("SUPER + CTRL + E", "rofimoji")
-exec("SUPER + CTRL + C", "qalculate-gtk")
 
 local function set_zoom(offset)
     local current, err = hl.get_config("cursor.zoom_factor")
@@ -168,7 +139,6 @@ hl.bind("SUPER + SHIFT + T", function()
         hl.dispatch(hl.dsp.window.float({ window = window }))
     end
 end)
-hl.bind("SUPER + J", hl.dsp.layout("togglesplit"))
 
 for key, direction in pairs({ left = "left", right = "right", up = "up", down = "down" }) do
     hl.bind("SUPER + " .. key, hl.dsp.focus({ direction = direction }))
@@ -182,7 +152,6 @@ hl.bind("SUPER + SHIFT + left", hl.dsp.window.resize({ relative = true, x = -100
 hl.bind("SUPER + SHIFT + down", hl.dsp.window.resize({ relative = true, x = 0, y = 100 }))
 hl.bind("SUPER + SHIFT + up", hl.dsp.window.resize({ relative = true, x = 0, y = -100 }))
 hl.bind("SUPER + G", hl.dsp.group.toggle())
-hl.bind("SUPER + K", hl.dsp.layout("swapsplit"))
 hl.bind("ALT + Tab", function()
     hl.dispatch(hl.dsp.window.cycle_next())
     hl.dispatch(hl.dsp.window.bring_to_top())
@@ -197,23 +166,21 @@ hl.bind("SUPER + SHIFT + A", function()
     end
     hl.config({ animations = { enabled = not enabled } })
 end)
-exec("SUPER + PRINT", scripts .. "/screenshot.sh")
-exec("SUPER + ALT + F", scripts .. "/screenshot.sh --instant")
-exec("SUPER + ALT + S", scripts .. "/screenshot.sh --instant-area")
+exec("SUPER + PRINT", "dms screenshot region")
+exec("SUPER + ALT + F", "dms screenshot full")
+exec("SUPER + ALT + S", "dms screenshot region --no-confirm")
 exec("SUPER + ALT + R", scripts .. "/toggle-record.sh")
-exec("SUPER + CTRL + X", scripts .. "/power-menu.sh")
-exec("SUPER + SHIFT + W", scripts .. "/waypaper.sh --random")
-exec("SUPER + CTRL + W", scripts .. "/waypaper.sh")
-exec("SUPER + ALT + W", scripts .. "/wallpaper-automation.sh")
-exec("SUPER + D", scripts .. "/launcher.sh")
-exec("SUPER + CTRL + K", scripts .. "/keybindings.sh")
-exec("SUPER + SHIFT + B", home .. "/.config/ashell/launch.sh")
-exec("SUPER + CTRL + B", home .. "/.config/ashell/toggle.sh")
-exec("SUPER + SHIFT + R", scripts .. "/loadconfig.sh")
-exec("SUPER + V", "cliphist list | rofi -dmenu | cliphist decode | wl-copy")
+exec("SUPER + CTRL + X", "dms ipc call powermenu toggle")
+exec("SUPER + SHIFT + W", "dms ipc call wallpaper next")
+exec("SUPER + CTRL + W", "dms ipc call dankdash wallpaper")
+exec("SUPER + D", "dms ipc call spotlight toggle")
+exec("SUPER + CTRL + K", "dms ipc call hypr toggleBinds")
+exec("SUPER + SHIFT + B", "systemctl --user restart dms.service")
+exec("SUPER + CTRL + B", "dms ipc call bar toggle index 0")
+exec("SUPER + V", "dms ipc call clipboard toggle")
 exec("SUPER + ALT + G", scripts .. "/gamemode.sh")
-exec("SUPER + CTRL + L", scripts .. "/power.sh lock")
-exec("SUPER + SHIFT + H", scripts .. "/hyprshade.sh")
+exec("SUPER + CTRL + L", "loginctl lock-session")
+exec("SUPER + SHIFT + H", "dms ipc call night toggle")
 
 local function move_workspace_windows(target)
     return function()
@@ -252,41 +219,21 @@ exec("XF86AudioPause", "playerctl pause")
 exec("XF86AudioNext", "playerctl next")
 exec("XF86AudioPrev", "playerctl previous")
 exec("XF86AudioMicMute", "wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle")
-exec("XF86Calculator", "qalculate-gtk")
-exec("XF86ScreenSaver", "hyprlock")
+exec("XF86ScreenSaver", "loginctl lock-session")
 exec("code:238", "brightnessctl -d smc::kbd_backlight s +10")
 exec("code:237", "brightnessctl -d smc::kbd_backlight s 10-")
 
 local window_rules = {
-    { match = { title = "^(Microsoft-edge)$" }, tile = true },
-    { match = { title = "^(Brave-browser)$" }, tile = true },
-    { match = { title = "^(Chromium)$" }, tile = true },
-    { match = { title = "^(pavucontrol)$" }, float = true },
-    { match = { title = "^(blueman-manager)$" }, float = true },
-    { match = { title = "^(nm-connection-editor)$" }, float = true },
-    { match = { title = "^(qalculate-gtk)$" }, float = true },
     { match = { title = "^(Picture-in-Picture)$" }, float = true, pin = true, move = { "69.5%", "4%" } },
     { match = { class = ".*" }, idle_inhibit = "fullscreen" },
-    { name = "resolve-xwayland", match = { class = "\\bresolve\\b", xwayland = true }, no_blur = true },
     { name = "old-school-runescape", match = { class = "osclient.exe" }, float = true, size = { 1400, 900 }, min_size = { 765, 502 }, center = true },
     { match = { class = "^(zen)$" }, workspace = "1 silent" },
     { match = { class = "^(dev\\.zed\\.Zed)$" }, workspace = "3 silent" },
     { match = { class = "^(rustdesk)$" }, workspace = "9 silent" },
     { match = { class = "^(vesktop)$" }, workspace = "10 silent" },
     { name = "pavucontrol", match = { class = ".*org.pulseaudio.pavucontrol.*" }, float = true, size = { 700, 600 }, center = true, pin = true },
-    { match = { title = "ChatGPT.*" }, float = true },
-    { name = "chatgpt-openai", match = { title = ".*chat.openai.com.*" }, float = true, size = { 500, "50%" }, move = { 20, 70 } },
-    { name = "waypaper", match = { class = ".*waypaper.*" }, float = true, size = { 900, 700 }, center = true, pin = true },
-    { name = "newelle", match = { class = "io.github.qwersyk.Newelle" }, float = true, size = { 1000, 700 }, center = true, pin = true },
     { name = "blueman", match = { class = "blueman-manager" }, float = true, size = { 800, 600 }, center = true },
-    { name = "nwg-look", match = { class = "nwg-look" }, float = true, size = { 700, 600 }, move = { "10%", "20%" }, pin = true },
-    { name = "nwg-displays", match = { class = "nwg-displays" }, float = true, size = { 900, 600 }, move = { "10%", "20%" }, pin = true },
-    { name = "missioncenter", match = { class = "io.missioncenter.MissionCenter" }, float = true, pin = true, center = true, size = { 900, 600 } },
-    { name = "missioncenter-prefs", match = { class = "missioncenter", title = "^(Preferences)$" }, float = true, pin = true, center = true },
-    { name = "gnome-calc", match = { class = "org.gnome.Calculator" }, float = true, size = { 700, 600 }, center = true },
     { name = "share-picker", match = { class = "hyprland-share-picker" }, float = true, pin = true, center = true, size = { 600, 400 } },
-    { name = "dotfiles-floating", match = { class = "dotfiles-floating" }, float = true, size = { 1000, 700 }, center = true },
-    { name = "dotfiles-sidepad", match = { class = "dotfiles-sidepad" }, float = true, size = { 1000, 700 }, center = true, pin = true },
     { name = "file-picker", match = { class = "xdg-desktop-portal-gtk", title = "^(Open.*Files?|Save.*Files?|All Files|Save)" }, float = true, center = true },
 }
 
@@ -294,9 +241,12 @@ for _, rule in ipairs(window_rules) do
     hl.window_rule(rule)
 end
 
-hl.layer_rule({ name = "swaync-control", match = { namespace = "swaync-control-center" }, blur = true, ignore_alpha = 0.3 })
-hl.layer_rule({ name = "swaync-notification", match = { namespace = "swaync-notification-window" }, blur = true, ignore_alpha = 0.3 })
-
 exec("SUPER + ALT + D", "/usr/lib/hyprwhspr/config/hyprland/hyprwhspr-tray.sh record", { description = "Speech-to-text" })
 
 require("monitors")
+
+-- DMS Include Configs
+require("dms.layout")
+require("dms.colors")
+require("dms.binds")
+require("dms.binds-user")

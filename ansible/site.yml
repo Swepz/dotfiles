@@ -4,12 +4,6 @@
   connection: local
 
   pre_tasks:
-    - name: Install community.general collection
-      ansible.builtin.command:
-        cmd: ansible-galaxy collection install community.general
-      changed_when: false
-      become: false
-
     - name: Remove retired packages
       become: true
       community.general.pacman:
