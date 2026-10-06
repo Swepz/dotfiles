@@ -17,6 +17,7 @@ stow_packages:
   - zed
 
 retired_packages:
+  - ml4w-hyprland
   - waybar
   - linux
   - linux-headers
