@@ -18,3 +18,6 @@ dms/.config/DankMaterialShell/plugins/
 dms/.config/DankMaterialShell/*.css
 dms/.config/DankMaterialShell/.firstlaunch
 dms/.config/DankMaterialShell/.changelog-*
+gtk/.config/gtk-*/colors.css
+gtk/.config/gtk-*/dank-colors.css
+hypr/.config/hypr/colors.conf
