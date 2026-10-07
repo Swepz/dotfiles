@@ -225,6 +225,9 @@ vim.api.nvim_create_autocmd("FileType", {
 		map("<leader>zx", "<Plug>ZExtractAbstract", "Insert Abstract")
 		map("<leader>zs", "<cmd>Zseek<cr>", "Search Library")
 		map("<leader>za", "<cmd>Zselectannotations<cr>", "Insert Annotations")
+		if vim.bo[event.buf].filetype == "tex" then
+			map("<leader>K", "<plug>(vimtex-doc-package)", "Vimtex Docs")
+		end
 	end,
 })
 
@@ -730,13 +733,56 @@ require("lazy").setup({
 			--  Feel free to add/remove any LSPs that you want here. They will automatically be installed.
 			--  See `:help lsp-config` for information about keys and how to configure
 			---@type table<string, vim.lsp.Config>
+			vim.api.nvim_create_autocmd("LspAttach", {
+				group = vim.api.nvim_create_augroup("language-specific-lsp-attach", { clear = true }),
+				callback = function(event)
+					local client = vim.lsp.get_client_by_id(event.data.client_id)
+					if not client then
+						return
+					end
+					if client.name == "ruff" then
+						client.server_capabilities.hoverProvider = false
+					elseif client.name == "clangd" then
+						vim.keymap.set(
+							"n",
+							"<leader>ch",
+							"<cmd>LspClangdSwitchSourceHeader<cr>",
+							{ buffer = event.buf, desc = "Switch Source/Header (C/C++)" }
+						)
+					end
+				end,
+			})
+
 			local servers = {
-				clangd = {},
-				basedpyright = {},
+				clangd = {
+					cmd = {
+						"clangd",
+						"--background-index",
+						"--clang-tidy",
+						"--header-insertion=iwyu",
+						"--completion-style=detailed",
+						"--function-arg-placeholders",
+						"--fallback-style=llvm",
+					},
+					init_options = {
+						usePlaceholders = true,
+						completeUnimported = true,
+						clangdFileStatus = true,
+					},
+				},
+				basedpyright = {
+					settings = {
+						basedpyright = { analysis = { typeCheckingMode = "standard" } },
+					},
+				},
 				ruff = {},
 				yamlls = {
 					settings = {
+						redhat = { telemetry = { enabled = false } },
 						yaml = {
+							keyOrdering = false,
+							format = { enable = true },
+							validate = true,
 							schemaStore = { enable = false, url = "" },
 							schemas = require("schemastore").yaml.schemas(),
 						},
@@ -745,10 +791,18 @@ require("lazy").setup({
 				dockerls = {},
 				docker_compose_language_service = {},
 				marksman = {},
-				harper_ls = { filetypes = { "markdown", "tex", "text", "gitcommit" } },
+				harper_ls = { filetypes = { "markdown", "text", "gitcommit" } },
 				-- rust_analyzer managed by rustaceanvim, not here
 				texlab = {},
-				jsonls = {},
+				jsonls = {
+					settings = {
+						json = {
+							schemas = require("schemastore").json.schemas(),
+							format = { enable = true },
+							validate = { enable = true },
+						},
+					},
+				},
 				taplo = {}, -- TOML
 				neocmake = {},
 				bashls = {},
@@ -1234,6 +1288,7 @@ require("lazy").setup({
 			vim.g.vimtex_compiler_method = "latexmk"
 			vim.g.vimtex_syntax_enabled = 0
 			vim.g.vimtex_syntax_conceal_disable = 1
+			vim.g.vimtex_mappings_disable = { n = { "K" } }
 		end,
 	},
 	-- ============================================================
