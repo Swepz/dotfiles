@@ -17,9 +17,11 @@ stow_packages:
   - lazygit
   - mime
   - nvim
+  - tmux
   - wireplumber
   - xdg-open
   - zathura
+  - zsh
 
 retired_packages:
   - alacritty
@@ -113,7 +115,9 @@ base_packages:
   - intel-ucode
 
 shell_packages:
-  - fish
+  - zsh
+  - zsh-autosuggestions
+  - zsh-syntax-highlighting
   - starship
   - zoxide
   - fzf
@@ -246,5 +250,3 @@ enabled_services:
   - fstrim.timer
   - mullvad-daemon
 
-tmux_repo: "https://github.com/gpakosz/.tmux.git"
-tmux_dest: "{{ ansible_facts.env.HOME }}/.tmux"

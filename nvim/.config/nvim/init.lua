@@ -8,6 +8,15 @@ vim.g.maplocalleader = " "
 vim.g.have_nerd_font = true
 
 local default_colorscheme = "terminal"
+
+vim.filetype.add({
+	filename = {
+		["compose.yml"] = "yaml.docker-compose",
+		["compose.yaml"] = "yaml.docker-compose",
+		["docker-compose.yml"] = "yaml.docker-compose",
+		["docker-compose.yaml"] = "yaml.docker-compose",
+	},
+})
 local colorscheme_state_file = vim.fn.stdpath("state") .. "/colorscheme"
 
 -- Transparent editor background so the terminal's opacity shows through.
@@ -521,6 +530,7 @@ require("lazy").setup({
 		-- Main LSP Configuration
 		"neovim/nvim-lspconfig",
 		dependencies = {
+			"b0o/SchemaStore.nvim",
 			-- Automatically install LSPs and related tools to stdpath for Neovim
 			-- Mason must be loaded before its dependents so we need to set it up here.
 			-- NOTE: `opts = {}` is the same as calling `require('mason').setup({})`
@@ -641,7 +651,19 @@ require("lazy").setup({
 			---@type table<string, vim.lsp.Config>
 			local servers = {
 				clangd = {},
-				pyright = {},
+				basedpyright = {},
+				ruff = {},
+				yamlls = {
+					settings = {
+						yaml = {
+							schemaStore = { enable = false, url = "" },
+							schemas = require("schemastore").yaml.schemas(),
+						},
+					},
+				},
+				dockerls = {},
+				docker_compose_language_service = {},
+				marksman = {},
 				-- rust_analyzer managed by rustaceanvim, not here
 				texlab = {},
 				jsonls = {},
@@ -695,8 +717,9 @@ require("lazy").setup({
 			vim.list_extend(ensure_installed, {
 				"stylua",
 				"clang-format",
-				"ruff",
 				"shfmt",
+				"shellcheck",
+				"prettier",
 			})
 
 			require("mason-tool-installer").setup({ ensure_installed = ensure_installed })
@@ -730,7 +753,7 @@ require("lazy").setup({
 				-- Disable "format_on_save lsp_fallback" for languages that don't
 				-- have a well standardized coding style. You can add additional
 				-- languages here or re-enable it for the disabled ones.
-				local disable_filetypes = { c = true, cpp = true }
+				local disable_filetypes = { c = true, cpp = true, markdown = true, yaml = true }
 				if disable_filetypes[vim.bo[bufnr].filetype] then
 					return nil
 				else
@@ -749,6 +772,8 @@ require("lazy").setup({
 				bash = { "shfmt" },
 				json = { "jq" },
 				toml = { "taplo" },
+				markdown = { "prettier" },
+				yaml = { "prettier" },
 			},
 		},
 	},
@@ -897,17 +922,6 @@ require("lazy").setup({
 		opts = { signs = false },
 	},
 
-	-- Smear cursor animation
-	{
-		"sphamba/smear-cursor.nvim",
-		opts = {
-			stiffness = 0.8,
-			trailing_stiffness = 0.5,
-			trailing_exponent = 0,
-			distance_stop_animating = 0.5,
-		},
-	},
-
 	{ -- Collection of various small independent plugins/modules
 		"nvim-mini/mini.nvim",
 		config = function()
@@ -960,6 +974,7 @@ require("lazy").setup({
 				"cmake",
 				"cpp",
 				"diff",
+				"dockerfile",
 				"html",
 				"json",
 				"latex",
@@ -975,6 +990,7 @@ require("lazy").setup({
 				"toml",
 				"vim",
 				"vimdoc",
+				"yaml",
 			}
 			require("nvim-treesitter").install(parsers)
 
@@ -1193,14 +1209,6 @@ require("lazy").setup({
 					wrap = true, -- Enable visual wrapping
 				},
 			},
-			-- Markview's table rendering misaligns with wrap=true (known limitation),
-			-- so disable inline rendering during zen mode for clean prose view.
-			on_open = function()
-				pcall(vim.cmd, "Markview Disable")
-			end,
-			on_close = function()
-				pcall(vim.cmd, "Markview Enable")
-			end,
 		},
 	},
 	-- ============================================================
@@ -1209,7 +1217,9 @@ require("lazy").setup({
 	{
 		"iamcco/markdown-preview.nvim",
 		cmd = { "MarkdownPreviewToggle", "MarkdownPreview", "MarkdownPreviewStop" },
-		build = "cd app && npx --yes yarn install",
+		build = function()
+			vim.fn["mkdp#util#install"]()
+		end,
 		init = function()
 			vim.g.mkdp_filetypes = { "markdown" }
 		end,
@@ -1220,26 +1230,36 @@ require("lazy").setup({
 		},
 	},
 
-	-- ============================================================
-	-- Markdown inline rendering (rich text inside the buffer)
-	-- LaTeX math, YAML frontmatter, callouts, tables, code blocks
-	-- ============================================================
 	{
-		"OXY2DEV/markview.nvim",
+		"MeanderingProgrammer/render-markdown.nvim",
 		ft = { "markdown" },
-		dependencies = { "nvim-tree/nvim-web-devicons" },
-		opts = function()
-			local presets = require("markview.presets")
-			return {
-				markdown = {
-					headings = presets.headings.glow,
-					horizontal_rules = presets.horizontal_rules.thick,
-					tables = presets.tables.rounded,
-				},
-			}
+		dependencies = { "nvim-treesitter/nvim-treesitter", "nvim-tree/nvim-web-devicons" },
+		opts = {
+			heading = { sign = false, position = "inline" },
+			code = { sign = false, border = "thin", language_name = false },
+			pipe_table = { preset = "round" },
+		},
+		config = function(_, opts)
+			local function clear_backgrounds()
+				for _, group in ipairs({
+					"RenderMarkdownH1Bg",
+					"RenderMarkdownH2Bg",
+					"RenderMarkdownH3Bg",
+					"RenderMarkdownH4Bg",
+					"RenderMarkdownH5Bg",
+					"RenderMarkdownH6Bg",
+					"RenderMarkdownCode",
+					"RenderMarkdownCodeInline",
+				}) do
+					vim.api.nvim_set_hl(0, group, {})
+				end
+			end
+			require("render-markdown").setup(opts)
+			clear_backgrounds()
+			vim.api.nvim_create_autocmd("ColorScheme", { callback = clear_backgrounds })
 		end,
 		keys = {
-			{ "<leader>mr", "<cmd>Markview Toggle<cr>", desc = "Toggle [M]arkview [R]ender" },
+			{ "<leader>mr", "<cmd>RenderMarkdown buf_toggle<cr>", desc = "Toggle [M]arkdown [R]ender" },
 		},
 	},
 }, { ---@diagnostic disable-line: missing-fields
