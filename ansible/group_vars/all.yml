@@ -3,21 +3,27 @@ dotfiles_repo: "git@github.com:Swepz/dotfiles.git"
 dotfiles_dest: "{{ ansible_facts.env.HOME }}/.dotfiles"
 
 stow_packages:
-  - alacritty
+  - bat
   - ccstatusline
   - dms
   - fish
+  - fontconfig
+  - ghostty
   - git
   - gtk
+  - herdr
   - hypr
   - hyprdynamicmonitors
+  - lazygit
   - mime
   - nvim
   - wireplumber
+  - xdg-open
   - zathura
-  - zed
 
 retired_packages:
+  - alacritty
+  - zed
   - ml4w-hyprland
   - wine-staging
   - wine-mono
@@ -116,15 +122,18 @@ shell_packages:
   - tldr
   - cloc
   - htop
+  - yazi
+  - poppler
+  - bat
+  - git-delta
 
 editor_packages:
   - neovim
   - tree-sitter-cli
-  - zed
   - nano
 
 terminal_packages:
-  - alacritty
+  - ghostty
   - tmux
 
 desktop_packages:
@@ -217,6 +226,7 @@ aur_packages:
   - sddm-sugar-candy-git
   - zen-browser-bin
   - google-chrome
+  - herdr-bin
   - visual-studio-code-bin
   - vesktop-bin
   - rustdesk-bin

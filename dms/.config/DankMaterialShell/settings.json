@@ -1,6 +1,7 @@
 {
-  "currentThemeName": "blue",
+  "currentThemeName": "custom",
   "currentThemeCategory": "registry",
+  "customThemeFile": "/home/swepz/.config/DankMaterialShell/themes/amoledNoir/theme.json",
   "matugenScheme": "scheme-expressive",
   "widgetBackgroundColor": "sth",
   "cornerRadius": 12,

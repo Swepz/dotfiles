@@ -1,0 +1,13 @@
+#!/bin/sh
+p="$(printf %s "$1" | sed 's/[[:space:]]*$//')"
+case "$p" in
+  file://*) p="${p#file://}"; p="/${p#*/}" ;;
+  *://*|mailto:*) exec /usr/bin/xdg-open "$p" ;;
+  "~"|"~/"*) p="$HOME${p#\~}" ;;
+esac
+if [ ! -e "$p" ]; then
+  line="$(printf %s "$p" | sed -nE 's/.*[^0-9:]:([0-9]+)(:[0-9]+)?$/\1/p')"
+  p="${p%%:[0-9]*}"
+  [ -n "$line" ] && exec ghostty +new-window --title=file-opener -e nvim "+$line" "$p"
+fi
+exec ghostty +new-window --title=file-opener -e yazi "$p"

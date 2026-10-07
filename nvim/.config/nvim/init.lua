@@ -7,7 +7,7 @@ vim.g.maplocalleader = " "
 -- Set to true if you have a Nerd Font installed and selected in the terminal
 vim.g.have_nerd_font = true
 
-local default_colorscheme = "tokyonight-moon"
+local default_colorscheme = "terminal"
 local colorscheme_state_file = vim.fn.stdpath("state") .. "/colorscheme"
 
 -- Transparent editor background so the terminal's opacity shows through.
@@ -51,6 +51,7 @@ local function save_colorscheme(name)
 end
 
 local function apply_colorscheme(name)
+	vim.o.termguicolors = true
 	if pcall(vim.cmd.colorscheme, name) then
 		return name
 	end

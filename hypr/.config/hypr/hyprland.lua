@@ -94,7 +94,6 @@ local autostart = {
     scripts .. "/gtk.sh",
     "mullvad-vpn",
     "zen-browser",
-    "zeditor",
     "rustdesk",
     "vesktop",
     "sh -c 'dbus-update-activation-environment --systemd --all && systemctl --user start hyprland-session.target'",
@@ -110,9 +109,11 @@ local function exec(keys, command, options)
     hl.bind(keys, hl.dsp.exec_cmd(command), options)
 end
 
-exec("SUPER + RETURN", "alacritty")
+exec("SUPER + RETURN", "ghostty +new-window")
 exec("SUPER + W", "zen-browser")
-exec("SUPER + E", "nautilus")
+exec("SUPER + E", "ghostty +new-window -e yazi")
+hl.workspace_rule({ workspace = "special:dropdown", on_created_empty = "ghostty +new-window --title=dropdown" })
+hl.bind("SUPER + code:49", hl.dsp.workspace.toggle_special("dropdown"))
 
 local function set_zoom(offset)
     local current, err = hl.get_config("cursor.zoom_factor")
@@ -140,7 +141,7 @@ hl.bind("SUPER + SHIFT + T", function()
     end
 end)
 
-for key, direction in pairs({ left = "left", right = "right", up = "up", down = "down" }) do
+for key, direction in pairs({ left = "left", right = "right", up = "up", down = "down", h = "left", l = "right", k = "up", j = "down" }) do
     hl.bind("SUPER + " .. key, hl.dsp.focus({ direction = direction }))
     hl.bind("SUPER + ALT + " .. key, hl.dsp.window.swap({ direction = direction }))
 end
@@ -228,13 +229,14 @@ local window_rules = {
     { match = { class = ".*" }, idle_inhibit = "fullscreen" },
     { name = "old-school-runescape", match = { class = "osclient.exe" }, float = true, size = { 1400, 900 }, min_size = { 765, 502 }, center = true },
     { match = { class = "^(zen)$" }, workspace = "1 silent" },
-    { match = { class = "^(dev\\.zed\\.Zed)$" }, workspace = "3 silent" },
     { match = { class = "^(rustdesk)$" }, workspace = "9 silent" },
     { match = { class = "^(vesktop)$" }, workspace = "10 silent" },
     { name = "pavucontrol", match = { class = ".*org.pulseaudio.pavucontrol.*" }, float = true, size = { 700, 600 }, center = true, pin = true },
     { name = "blueman", match = { class = "blueman-manager" }, float = true, size = { 800, 600 }, center = true },
     { name = "share-picker", match = { class = "hyprland-share-picker" }, float = true, pin = true, center = true, size = { 600, 400 } },
     { name = "file-picker", match = { class = "xdg-desktop-portal-gtk", title = "^(Open.*Files?|Save.*Files?|All Files|Save)" }, float = true, center = true },
+    { name = "file-opener", match = { title = "^(file-opener)$" }, float = true, size = { 1400, 900 }, center = true },
+    { name = "dropdown-terminal", match = { title = "^(dropdown)$" }, workspace = "special:dropdown silent" },
 }
 
 for _, rule in ipairs(window_rules) do
