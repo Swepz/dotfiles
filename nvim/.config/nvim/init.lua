@@ -185,13 +185,48 @@ vim.diagnostic.config({
 	jump = { float = true },
 })
 
-vim.keymap.set("n", "<leader>q", vim.diagnostic.setloclist, { desc = "Open diagnostic [Q]uickfix list" })
+vim.keymap.set("n", "<leader>cd", vim.diagnostic.open_float, { desc = "Line Diagnostics" })
 
--- Toggle line wrap
-vim.keymap.set("n", "<leader>tw", function()
+vim.keymap.set("n", "<leader>uw", function()
 	vim.wo.wrap = not vim.wo.wrap
 	vim.notify("wrap: " .. tostring(vim.wo.wrap))
-end, { desc = "[T]oggle [W]rap" })
+end, { desc = "Toggle Wrap" })
+vim.keymap.set("n", "<leader>us", function()
+	vim.wo.spell = not vim.wo.spell
+	vim.notify("spell: " .. tostring(vim.wo.spell))
+end, { desc = "Toggle Spelling" })
+vim.keymap.set("n", "<leader>ud", function()
+	vim.diagnostic.enable(not vim.diagnostic.is_enabled())
+	vim.notify("diagnostics: " .. tostring(vim.diagnostic.is_enabled()))
+end, { desc = "Toggle Diagnostics" })
+
+vim.keymap.set("n", "<S-h>", "<cmd>bprevious<cr>", { desc = "Prev Buffer" })
+vim.keymap.set("n", "<S-l>", "<cmd>bnext<cr>", { desc = "Next Buffer" })
+vim.keymap.set("n", "<leader>bb", "<cmd>e #<cr>", { desc = "Switch to Other Buffer" })
+vim.keymap.set("n", "<leader>bd", "<cmd>bdelete<cr>", { desc = "Delete Buffer" })
+vim.keymap.set("n", "<leader>bo", "<cmd>%bdelete|edit #|bdelete #<cr>", { desc = "Delete Other Buffers" })
+vim.keymap.set("n", "<leader>-", "<C-w>s", { desc = "Split Window Below" })
+vim.keymap.set("n", "<leader>|", "<C-w>v", { desc = "Split Window Right" })
+vim.keymap.set("n", "<leader>wd", "<C-w>c", { desc = "Delete Window" })
+vim.keymap.set("n", "<leader>qq", "<cmd>qa<cr>", { desc = "Quit All" })
+vim.keymap.set("n", "<leader>su", "<cmd>Undotree<cr>", { desc = "Undotree" })
+vim.keymap.set("n", "<leader>e", "<cmd>Oil<cr>", { desc = "Explorer (Oil)" })
+
+vim.api.nvim_create_autocmd("FileType", {
+	pattern = { "tex", "markdown" },
+	callback = function(event)
+		local function map(lhs, rhs, desc)
+			vim.keymap.set("n", lhs, rhs, { buffer = event.buf, desc = desc })
+		end
+		map("<leader>zi", "<Plug>ZCitationInfo", "Citation Info")
+		map("<leader>zI", "<Plug>ZCitationCompleteInfo", "Citation Full Info")
+		map("<leader>zo", "<Plug>ZOpenAttachment", "Open Attachment")
+		map("<leader>zv", "<Plug>ZViewDocument", "View Document")
+		map("<leader>zx", "<Plug>ZExtractAbstract", "Insert Abstract")
+		map("<leader>zs", "<cmd>Zseek<cr>", "Search Library")
+		map("<leader>za", "<cmd>Zselectannotations<cr>", "Insert Annotations")
+	end,
+})
 
 -- Exit terminal mode in the builtin terminal with a shortcut that is a bit easier
 -- for people to discover. Otherwise, you normally need to press <C-\><C-n>, which
@@ -300,6 +335,28 @@ require("lazy").setup({
 				topdelete = { text = "‾" }, ---@diagnostic disable-line: missing-fields
 				changedelete = { text = "~" }, ---@diagnostic disable-line: missing-fields
 			},
+			on_attach = function(buffer)
+				local gs = require("gitsigns")
+				local function map(mode, lhs, rhs, desc)
+					vim.keymap.set(mode, lhs, rhs, { buffer = buffer, desc = desc })
+				end
+				map("n", "]h", function()
+					gs.nav_hunk("next")
+				end, "Next Hunk")
+				map("n", "[h", function()
+					gs.nav_hunk("prev")
+				end, "Prev Hunk")
+				map({ "n", "x" }, "<leader>ghs", ":Gitsigns stage_hunk<cr>", "Stage Hunk")
+				map({ "n", "x" }, "<leader>ghr", ":Gitsigns reset_hunk<cr>", "Reset Hunk")
+				map("n", "<leader>ghS", gs.stage_buffer, "Stage Buffer")
+				map("n", "<leader>ghR", gs.reset_buffer, "Reset Buffer")
+				map("n", "<leader>ghp", gs.preview_hunk_inline, "Preview Hunk Inline")
+				map("n", "<leader>gb", function()
+					gs.blame_line({ full = true })
+				end, "Blame Line")
+				map("n", "<leader>gB", gs.blame, "Blame Buffer")
+				map({ "o", "x" }, "ih", ":<C-u>Gitsigns select_hunk<cr>", "Select Hunk")
+			end,
 		},
 	},
 
@@ -330,12 +387,18 @@ require("lazy").setup({
 
 			-- Document existing key chains
 			spec = {
-				{ "<leader>s", group = "[S]earch", mode = { "n", "v" } },
-				{ "<leader>t", group = "[T]oggle" },
-				{ "<leader>h", group = "Git [H]unk", mode = { "n", "v" } },
-				{ "<leader>x", group = "Diagnostics" },
-				{ "<leader>b", group = "[B]uffer" },
-				{ "<leader>q", group = "Session" },
+				{ "<leader>b", group = "buffer" },
+				{ "<leader>c", group = "code", mode = { "n", "x" } },
+				{ "<leader>f", group = "file/find" },
+				{ "<leader>g", group = "git", mode = { "n", "x" } },
+				{ "<leader>gh", group = "hunks", mode = { "n", "x" } },
+				{ "<leader>l", group = "latex" },
+				{ "<leader>q", group = "quit/session" },
+				{ "<leader>s", group = "search", mode = { "n", "x" } },
+				{ "<leader>u", group = "ui" },
+				{ "<leader>w", group = "windows" },
+				{ "<leader>x", group = "diagnostics/quickfix" },
+				{ "<leader>z", group = "zotero" },
 				{ "gr", group = "LSP Actions", mode = { "n" } },
 			},
 		},
@@ -424,17 +487,21 @@ require("lazy").setup({
 
 			-- See `:help telescope.builtin`
 			local builtin = require("telescope.builtin")
-			vim.keymap.set("n", "<leader>sh", builtin.help_tags, { desc = "[S]earch [H]elp" })
-			vim.keymap.set("n", "<leader>sk", builtin.keymaps, { desc = "[S]earch [K]eymaps" })
-			vim.keymap.set("n", "<leader>sf", builtin.find_files, { desc = "[S]earch [F]iles" })
-			vim.keymap.set("n", "<leader>ss", builtin.builtin, { desc = "[S]earch [S]elect Telescope" })
-			vim.keymap.set({ "n", "v" }, "<leader>sw", builtin.grep_string, { desc = "[S]earch current [W]ord" })
-			vim.keymap.set("n", "<leader>sg", builtin.live_grep, { desc = "[S]earch by [G]rep" })
-			vim.keymap.set("n", "<leader>sd", builtin.diagnostics, { desc = "[S]earch [D]iagnostics" })
-			vim.keymap.set("n", "<leader>sr", builtin.resume, { desc = "[S]earch [R]esume" })
-			vim.keymap.set("n", "<leader>s.", builtin.oldfiles, { desc = '[S]earch Recent Files ("." for repeat)' })
-			vim.keymap.set("n", "<leader>sc", builtin.commands, { desc = "[S]earch [C]ommands" })
-			vim.keymap.set("n", "<leader><leader>", builtin.buffers, { desc = "[ ] Find existing buffers" })
+			vim.keymap.set("n", "<leader>sh", builtin.help_tags, { desc = "Help Pages" })
+			vim.keymap.set("n", "<leader>sk", builtin.keymaps, { desc = "Keymaps" })
+			vim.keymap.set("n", "<leader>ff", builtin.find_files, { desc = "Find Files" })
+			vim.keymap.set("n", "<leader><leader>", builtin.find_files, { desc = "Find Files" })
+			vim.keymap.set("n", "<leader>fb", builtin.buffers, { desc = "Buffers" })
+			vim.keymap.set("n", "<leader>,", builtin.buffers, { desc = "Buffers" })
+			vim.keymap.set("n", "<leader>fr", builtin.oldfiles, { desc = "Recent" })
+			vim.keymap.set("n", "<leader>/", builtin.live_grep, { desc = "Grep" })
+			vim.keymap.set("n", "<leader>ss", builtin.lsp_document_symbols, { desc = "Goto Symbol" })
+			vim.keymap.set("n", "<leader>gs", builtin.git_status, { desc = "Git Status" })
+			vim.keymap.set({ "n", "v" }, "<leader>sw", builtin.grep_string, { desc = "Word" })
+			vim.keymap.set("n", "<leader>sg", builtin.live_grep, { desc = "Grep" })
+			vim.keymap.set("n", "<leader>sd", builtin.diagnostics, { desc = "Diagnostics" })
+			vim.keymap.set("n", "<leader>sR", builtin.resume, { desc = "Resume" })
+			vim.keymap.set("n", "<leader>sc", builtin.commands, { desc = "Commands" })
 
 			-- This runs on LSP attach per buffer (see main LSP attach function in 'neovim/nvim-lspconfig' config for more info,
 			-- it is better explained there). This allows easily switching between pickers if you prefer using something else!
@@ -491,13 +558,13 @@ require("lazy").setup({
 			})
 
 			-- Override default behavior and theme when searching
-			vim.keymap.set("n", "<leader>/", function()
+			vim.keymap.set("n", "<leader>sb", function()
 				-- You can pass additional configuration to Telescope to change the theme, layout, etc.
 				builtin.current_buffer_fuzzy_find(require("telescope.themes").get_dropdown({
 					winblend = 10,
 					previewer = false,
 				}))
-			end, { desc = "[/] Fuzzily search in current buffer" })
+			end, { desc = "Buffer Lines" })
 
 			-- It's also possible to pass additional configuration options.
 			--  See `:help telescope.builtin.live_grep()` for information about particular keys
@@ -506,14 +573,14 @@ require("lazy").setup({
 					grep_open_files = true,
 					prompt_title = "Live Grep in Open Files",
 				})
-			end, { desc = "[S]earch [/] in Open Files" })
+			end, { desc = "Grep Open Buffers" })
 
 			-- Shortcut for searching your Neovim configuration files
-			vim.keymap.set("n", "<leader>sn", function()
+			vim.keymap.set("n", "<leader>fc", function()
 				builtin.find_files({ cwd = vim.fn.stdpath("config") })
-			end, { desc = "[S]earch [N]eovim files" })
+			end, { desc = "Find Config File" })
 
-			vim.keymap.set("n", "<leader>st", function()
+			vim.keymap.set("n", "<leader>uC", function()
 				local actions = require("telescope.actions")
 				local action_state = require("telescope.actions.state")
 
@@ -535,7 +602,7 @@ require("lazy").setup({
 						return true
 					end,
 				})
-			end, { desc = "[S]earch [T]hemes" })
+			end, { desc = "Colorschemes" })
 		end,
 	},
 
@@ -652,9 +719,9 @@ require("lazy").setup({
 					--
 					-- This may be unwanted, since they displace some of your code
 					if client and client:supports_method("textDocument/inlayHint", event.buf) then
-						map("<leader>th", function()
+						map("<leader>uh", function()
 							vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({ bufnr = event.buf }))
-						end, "[T]oggle Inlay [H]ints")
+						end, "Toggle Inlay Hints")
 					end
 				end,
 			})
@@ -752,12 +819,12 @@ require("lazy").setup({
 		cmd = { "ConformInfo" },
 		keys = {
 			{
-				"<leader>f",
+				"<leader>cf",
 				function()
 					require("conform").format({ async = true, lsp_format = "fallback" })
 				end,
 				mode = "",
-				desc = "[F]ormat buffer",
+				desc = "Format",
 			},
 		},
 		---@module 'conform'
@@ -1107,25 +1174,17 @@ require("lazy").setup({
 			local harpoon = require("harpoon")
 			harpoon:setup()
 
-			vim.keymap.set("n", "<leader>a", function()
+			vim.keymap.set("n", "<leader>H", function()
 				harpoon:list():add()
-			end, { desc = "Harpoon add file" })
-			vim.keymap.set("n", "<leader>e", function()
+			end, { desc = "Harpoon File" })
+			vim.keymap.set("n", "<leader>h", function()
 				harpoon.ui:toggle_quick_menu(harpoon:list())
-			end, { desc = "Harpoon menu" })
-
-			vim.keymap.set("n", "<C-1>", function()
-				harpoon:list():select(1)
-			end, { desc = "Harpoon file 1" })
-			vim.keymap.set("n", "<C-2>", function()
-				harpoon:list():select(2)
-			end, { desc = "Harpoon file 2" })
-			vim.keymap.set("n", "<C-3>", function()
-				harpoon:list():select(3)
-			end, { desc = "Harpoon file 3" })
-			vim.keymap.set("n", "<C-4>", function()
-				harpoon:list():select(4)
-			end, { desc = "Harpoon file 4" })
+			end, { desc = "Harpoon Quick Menu" })
+			for i = 1, 5 do
+				vim.keymap.set("n", "<leader>" .. i, function()
+					harpoon:list():select(i)
+				end, { desc = "Harpoon to File " .. i })
+			end
 		end,
 	},
 
@@ -1183,7 +1242,7 @@ require("lazy").setup({
 	{
 		"folke/zen-mode.nvim",
 		keys = {
-			{ "<leader>z", "<cmd>ZenMode<cr>", desc = "Toggle [Z]en Mode" },
+			{ "<leader>uz", "<cmd>ZenMode<cr>", desc = "Toggle Zen Mode" },
 		},
 		opts = {
 			window = {
@@ -1210,13 +1269,18 @@ require("lazy").setup({
 		ft = { "markdown" },
 		keys = {
 			-- Here is your keybinding: Space + m + p
-			{ "<leader>mp", "<cmd>MarkdownPreviewToggle<cr>", desc = "Toggle [M]arkdown [P]review" },
+			{ "<leader>cp", "<cmd>MarkdownPreviewToggle<cr>", ft = "markdown", desc = "Markdown Preview" },
 		},
 	},
 
 	{
 		"esmuellert/codediff.nvim",
 		cmd = "CodeDiff",
+		keys = {
+			{ "<leader>gd", "<cmd>CodeDiff<cr>", desc = "Diff Working Tree" },
+			{ "<leader>gD", "<cmd>CodeDiff main<cr>", desc = "Diff vs main" },
+			{ "<leader>gl", "<cmd>CodeDiff history<cr>", desc = "Git Log" },
+		},
 	},
 	{
 		"jalvesaq/zotcite",
@@ -1256,7 +1320,7 @@ require("lazy").setup({
 			vim.api.nvim_create_autocmd("ColorScheme", { callback = clear_backgrounds })
 		end,
 		keys = {
-			{ "<leader>mr", "<cmd>RenderMarkdown buf_toggle<cr>", desc = "Toggle [M]arkdown [R]ender" },
+			{ "<leader>um", "<cmd>RenderMarkdown buf_toggle<cr>", ft = "markdown", desc = "Toggle Markdown Render" },
 		},
 	},
 }, { ---@diagnostic disable-line: missing-fields
