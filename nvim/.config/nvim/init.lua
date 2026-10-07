@@ -147,6 +147,20 @@ vim.o.scrolloff = 10
 -- See `:help 'confirm'`
 vim.o.confirm = true
 vim.o.termguicolors = true
+vim.opt.diffopt:remove("inline:char")
+vim.opt.diffopt:append("inline:word")
+require("vim._core.ui2").enable({})
+vim.cmd.packadd("nvim.undotree")
+vim.cmd.packadd("nvim.difftool")
+
+local ghostty_theme_reload = vim.uv.new_timer()
+vim.uv.new_fs_event():start(vim.fn.expand("~/.config/ghostty/themes"), {}, function()
+	ghostty_theme_reload:start(200, 0, vim.schedule_wrap(function()
+		if vim.g.colors_name == "terminal" then
+			vim.cmd.colorscheme("terminal")
+		end
+	end))
+end)
 
 -- [[ Basic Keymaps ]]
 --  See `:help vim.keymap.set()`
@@ -664,6 +678,7 @@ require("lazy").setup({
 				dockerls = {},
 				docker_compose_language_service = {},
 				marksman = {},
+				harper_ls = { filetypes = { "markdown", "tex", "text", "gitcommit" } },
 				-- rust_analyzer managed by rustaceanvim, not here
 				texlab = {},
 				jsonls = {},
@@ -873,44 +888,6 @@ require("lazy").setup({
 		},
 	},
 
-	{ -- You can easily change to a different colorscheme.
-		-- Change the name of the colorscheme plugin below, and then
-		-- change the command in the config to whatever the name of that colorscheme is.
-		--
-		-- If you want to see what colorschemes are already installed, you can use `:Telescope colorscheme`.
-		"folke/tokyonight.nvim",
-		priority = 1000,
-		config = function()
-			require("tokyonight").setup({
-				transparent = true,
-				styles = {
-					comments = { italic = false },
-				},
-			})
-			local colorscheme = read_colorscheme()
-			local applied_colorscheme = apply_colorscheme(colorscheme)
-			if applied_colorscheme and applied_colorscheme ~= colorscheme then
-				save_colorscheme(applied_colorscheme)
-			end
-		end,
-	},
-
-	-- Extra colorschemes for the theme picker (<leader>st)
-	{ "catppuccin/nvim", name = "catppuccin", lazy = true }, -- mocha, macchiato, frappe, latte
-	{ "rose-pine/neovim", name = "rose-pine", lazy = true }, -- rose-pine, rose-pine-moon, rose-pine-dawn
-	{ "rebelot/kanagawa.nvim", lazy = true }, -- kanagawa, kanagawa-wave, kanagawa-dragon, kanagawa-lotus
-	{ "EdenEast/nightfox.nvim", lazy = true }, -- nightfox, duskfox, carbonfox, terafox, nordfox
-	{ "sainnhe/gruvbox-material", lazy = true },
-	{ "ellisonleao/gruvbox.nvim", lazy = true },
-	{ "maxmx03/fluoromachine.nvim", lazy = true }, -- synthwave/neon (theme: fluoromachine, retrowave, delta)
-	{ "Mofiqul/dracula.nvim", lazy = true },
-	{
-		"navarasu/onedark.nvim",
-		lazy = true,
-		opts = { style = "cool" },
-	},
-	{ "nyoom-engineering/oxocarbon.nvim", lazy = true },
-
 	-- Highlight todo, notes, etc in comments
 	{
 		"folke/todo-comments.nvim",
@@ -924,6 +901,7 @@ require("lazy").setup({
 
 	{ -- Collection of various small independent plugins/modules
 		"nvim-mini/mini.nvim",
+		priority = 1000,
 		config = function()
 			-- Better Around/Inside textobjects
 			--
@@ -957,6 +935,12 @@ require("lazy").setup({
 
 			-- ... and there is more!
 			--  Check out: https://github.com/nvim-mini/mini.nvim
+
+			local colorscheme = read_colorscheme()
+			local applied_colorscheme = apply_colorscheme(colorscheme)
+			if applied_colorscheme and applied_colorscheme ~= colorscheme then
+				save_colorscheme(applied_colorscheme)
+			end
 		end,
 	},
 
@@ -1230,6 +1214,19 @@ require("lazy").setup({
 		},
 	},
 
+	{
+		"esmuellert/codediff.nvim",
+		cmd = "CodeDiff",
+	},
+	{
+		"jalvesaq/zotcite",
+		dependencies = { "nvim-treesitter/nvim-treesitter", "nvim-telescope/telescope.nvim" },
+		config = function()
+			require("zotcite").setup({
+				key_type = "better-bibtex",
+			})
+		end,
+	},
 	{
 		"MeanderingProgrammer/render-markdown.nvim",
 		ft = { "markdown" },

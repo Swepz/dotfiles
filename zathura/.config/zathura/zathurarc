@@ -1,2 +1,5 @@
 set selection-clipboard clipboard
 set render-loading false
+
+set synctex true
+set synctex-editor-command "nvim --headless -c \"VimtexInverseSearch %{line} '%{input}'\""

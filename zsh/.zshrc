@@ -38,14 +38,6 @@ alias gfo='git fetch origin'
 alias gcheck='git checkout'
 alias gcredential='git config credential.helper store'
 
-codex() {
-    if (( ${@[(Ie)--yolo]} )); then
-        command codex --dangerously-bypass-hook-trust "$@"
-    else
-        command codex "$@"
-    fi
-}
-
 claude() {
     python3 -c '
 import json, os, sys, tempfile
