@@ -20,6 +20,7 @@ stow_packages:
   - tmux
   - wireplumber
   - xdg-open
+  - yazi
   - zathura
   - zsh
 
