@@ -5,5 +5,8 @@ export EDITOR=nvim
 export IDADIR="$HOME/.local/opt/ida-9.4"
 export IDAPYTHON_VENV_EXECUTABLE="$HOME/.local/opt/ida-venv/bin/python"
 set -a
-source "$HOME/.config/environment.d/50-api-keys.conf"
+for env_file in "$HOME"/.config/environment.d/*.conf; do
+  source "$env_file"
+done
+unset env_file
 set +a
