@@ -81,3 +81,21 @@
       [Sleep]
       SuspendState=freeze
 
+- name: Enable BlueZ experimental interfaces for per-device PreferredBearer
+  tags: [bluetooth]
+  become: true
+  ansible.builtin.lineinfile:
+    path: /etc/bluetooth/main.conf
+    regexp: '^#?\s*Experimental\s*='
+    line: Experimental = true
+    insertafter: '^\[General\]'
+  register: bluetooth_experimental_config
+
+- name: Restart bluetooth after experimental change
+  tags: [bluetooth]
+  become: true
+  ansible.builtin.systemd:
+    name: bluetooth
+    state: restarted
+  when: bluetooth_experimental_config.changed
+
