@@ -18,7 +18,7 @@ hl.config({
     },
     input = {
         kb_layout = "se, us",
-        kb_variant = "",
+        kb_variant = "nodeadkeys,",
         kb_model = "",
         kb_options = "",
         numlock_by_default = true,
