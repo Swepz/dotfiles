@@ -1,0 +1,8 @@
+[Unit]
+Description=Watch DMS settings for Ghostty background opacity
+
+[Path]
+PathChanged=%h/.config/DankMaterialShell/settings.json
+
+[Install]
+WantedBy=default.target

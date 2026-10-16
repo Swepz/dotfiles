@@ -1,0 +1,5 @@
+#!/bin/sh
+set -eu
+opacity=$(jq '.popupTransparency // 1' "$HOME/.config/DankMaterialShell/settings.json")
+printf 'background-opacity = %s\n' "$opacity" > "$HOME/.config/ghostty/opacity"
+systemctl --user try-reload-or-restart app-com.mitchellh.ghostty.service

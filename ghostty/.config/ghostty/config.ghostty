@@ -2,3 +2,5 @@ font-family = FiraCode Nerd Font
 theme = dankcolors
 confirm-close-surface = false
 custom-shader = shaders/cursor_warp.glsl
+app-notifications = no-config-reload
+config-file = ?opacity

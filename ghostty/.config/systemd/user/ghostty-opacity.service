@@ -1,0 +1,9 @@
+[Unit]
+Description=Apply DMS popup transparency as Ghostty background opacity
+
+[Service]
+Type=oneshot
+ExecStart=%h/.config/ghostty/sync-opacity
+
+[Install]
+WantedBy=default.target
