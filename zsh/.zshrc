@@ -5,11 +5,28 @@ SAVEHIST=100000
 setopt share_history hist_ignore_all_dups hist_ignore_space hist_reduce_blanks extended_history
 setopt auto_cd interactive_comments no_beep
 bindkey -e
+WORDCHARS=${WORDCHARS//\/}
+autoload -Uz up-line-or-beginning-search down-line-or-beginning-search
+zle -N up-line-or-beginning-search
+zle -N down-line-or-beginning-search
+bindkey '^[[A' up-line-or-beginning-search
+bindkey '^[[B' down-line-or-beginning-search
+bindkey '^[[1;5D' backward-word
+bindkey '^[[1;5C' forward-word
+bindkey '^[[1;3D' backward-word
+bindkey '^[[1;3C' forward-word
+bindkey '^H' backward-kill-word
+bindkey '^[[3;5~' kill-word
+bindkey '^[[3~' delete-char
+bindkey '^[[H' beginning-of-line
+bindkey '^[[F' end-of-line
 
 autoload -Uz compinit
 compinit -d "$HOME/.cache/zsh/zcompdump"
 zstyle ':completion:*' menu select
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
+zmodload zsh/complist
+bindkey -M menuselect '^[[Z' reverse-menu-complete
 
 export GPG_TTY=$TTY
 export MANPAGER="less -R --use-color -Dd+r -Du+b"
