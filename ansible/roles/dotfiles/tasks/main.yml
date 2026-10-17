@@ -22,6 +22,17 @@
   register: stow_result
   changed_when: "'LINK: ' in stow_result.stderr"
 
+- name: Enable stowed user services
+  ansible.builtin.systemd:
+    name: "{{ item }}"
+    enabled: true
+    daemon_reload: true
+    scope: user
+  loop:
+    - ghostty-opacity.path
+    - ghostty-opacity.service
+  become: false
+
 - name: Install DankMaterialShell plugins from the lockfile
   ansible.builtin.command:
     cmd: "dms plugins restore {{ ansible_facts.env.HOME }}/.config/DankMaterialShell/plugins.lock.json"
