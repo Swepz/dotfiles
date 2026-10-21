@@ -17,6 +17,7 @@ stow_packages:
   - lazygit
   - mime
   - nvim
+  - secrets
   - tmux
   - wireplumber
   - xdg-open
@@ -212,6 +213,7 @@ app_packages:
   - distrobox
   - gnome-calendar
   - gnome-keyring
+  - bitwarden
   - okular
   - mpv
   - mullvad-vpn
@@ -232,6 +234,7 @@ aur_packages:
   - zen-browser-bin
   - google-chrome
   - herdr-bin
+  - bws-bin
   - visual-studio-code-bin
   - vesktop-bin
   - rustdesk-bin
