@@ -234,7 +234,6 @@ aur_packages:
   - zen-browser-bin
   - google-chrome
   - herdr-bin
-  - bws-bin
   - visual-studio-code-bin
   - vesktop-bin
   - rustdesk-bin
